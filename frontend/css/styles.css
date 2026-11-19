@@ -1,0 +1,291 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  background: #f4f6fb;
+  color: #1f2937;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+#app {
+  width: 100%;
+  max-width: 640px;
+}
+
+.screen {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  text-align: center;
+}
+
+.screen h1 {
+  margin-top: 0;
+}
+
+.section-title {
+  font-size: 1.1rem;
+  margin: 1.5rem 0 0.75rem;
+  text-align: left;
+}
+
+.loading {
+  color: #6b7280;
+}
+
+.categories,
+.difficultes,
+.answers {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.categories {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.difficultes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+}
+
+.home-screen .btn {
+  margin-top: 0.5rem;
+}
+
+.difficulty-help {
+  margin: 0 0 0.75rem;
+  color: #6b7280;
+  font-size: 0.9rem;
+  text-align: left;
+}
+
+.difficulty-option {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  cursor: pointer;
+}
+
+.category {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.2rem;
+  padding: 0.9rem 1rem;
+  font: inherit;
+  text-align: left;
+  border: 2px solid #d1d5db;
+  border-radius: 8px;
+  background: #ffffff;
+  cursor: pointer;
+}
+
+.category span {
+  color: #6b7280;
+  font-size: 0.9rem;
+}
+
+.category:hover {
+  border-color: #4f46e5;
+  background: #eef2ff;
+}
+
+.category--selected,
+.category--selected:hover {
+  border-color: #4f46e5;
+  background: #e0e7ff;
+}
+
+.badge {
+  display: inline-block;
+  padding: 0.25rem 0.7rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.badge--1 { background: #16a34a; }
+.badge--2 { background: #2563eb; }
+.badge--3 { background: #ea580c; }
+.badge--4 { background: #dc2626; }
+.badge--5 { background: #7c3aed; }
+
+.question-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.progress {
+  color: #6b7280;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.question {
+  font-size: 1.4rem;
+  margin: 1rem 0 1.5rem;
+}
+
+.answers {
+  display: grid;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.answer {
+  width: 100%;
+  padding: 0.9rem 1rem;
+  font: inherit;
+  border: 2px solid #d1d5db;
+  border-radius: 8px;
+  background: #ffffff;
+  cursor: pointer;
+  transition: border-color 0.15s, background-color 0.15s;
+}
+
+.answer:hover:not(:disabled) {
+  border-color: #4f46e5;
+  background: #eef2ff;
+}
+
+.answer:disabled {
+  cursor: default;
+}
+
+.answer--correct,
+.answer--correct:disabled {
+  border-color: #16a34a;
+  background: #dcfce7;
+}
+
+.answer--wrong,
+.answer--wrong:disabled {
+  border-color: #dc2626;
+  background: #fee2e2;
+}
+
+.feedback {
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  text-align: left;
+}
+
+.feedback p {
+  margin: 0.3rem 0;
+}
+
+.feedback-titre {
+  font-weight: 700;
+}
+
+.feedback--correct {
+  background: #dcfce7;
+}
+
+.feedback--wrong {
+  background: #fee2e2;
+}
+
+.result-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 9rem), 1fr));
+  gap: 0.75rem;
+  margin: 1.5rem 0;
+}
+
+.result-stats div {
+  padding: 1rem 0.5rem;
+  border-radius: 8px;
+  background: #eef2ff;
+}
+
+.stats-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1rem;
+  display: grid;
+  gap: 0.75rem;
+  text-align: left;
+}
+
+.stats-ligne {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.3rem;
+}
+
+.stats-barre {
+  height: 0.6rem;
+  background: #e5e7eb;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.stats-barre span {
+  display: block;
+  height: 100%;
+  background: #4f46e5;
+  border-radius: 999px;
+}
+
+.stats-point {
+  text-align: left;
+  margin: 0.4rem 0;
+  font-weight: 600;
+}
+
+.stats-point--fort {
+  color: #15803d;
+}
+
+.stats-point--faible {
+  color: #b91c1c;
+}
+
+.result-stats dd {
+  margin: 0.25rem 0 0;
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #3730a3;
+}
+
+.btn {
+  padding: 0.8rem 1.6rem;
+  font: inherit;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background: #4f46e5;
+  color: #ffffff;
+}
+
+.btn-primary:hover {
+  background: #4338ca;
+}
+
+.btn:disabled,
+.btn-primary:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+}
