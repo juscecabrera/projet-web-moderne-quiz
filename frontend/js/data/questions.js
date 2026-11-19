@@ -1,0 +1,143 @@
+// Données de test, miroir de database/donnees_test.sql.
+// Quand le backend existera, ce fichier sera remplacé par un appel à l'API.
+
+window.Quiz.CATEGORIES = [
+  { id: 1, nom: 'Géographie', description: 'Pays, capitales et continents' },
+  { id: 2, nom: 'Histoire', description: 'Événements et personnages historiques' },
+  { id: 3, nom: 'Sciences', description: 'Sciences et découvertes' },
+  { id: 4, nom: 'Sport', description: 'Sports et compétitions' },
+  { id: 5, nom: 'Culture générale', description: 'Connaissances variées' },
+];
+
+window.Quiz.QUESTIONS = [
+  {
+    id: 1,
+    enonce: 'Quelle est la capitale du Togo ?',
+    explication: 'Lomé est la capitale du Togo.',
+    categorieId: 1,
+    difficulteId: 1,
+    reponses: [
+      { id: 1, texte: 'Cotonou', estCorrecte: false },
+      { id: 2, texte: 'Lomé', estCorrecte: true },
+      { id: 3, texte: 'Accra', estCorrecte: false },
+      { id: 4, texte: 'Dakar', estCorrecte: false },
+    ],
+  },
+  {
+    id: 2,
+    enonce: 'Quel est le plus grand océan du monde ?',
+    explication: 'L’océan Pacifique est le plus grand océan du monde.',
+    categorieId: 1,
+    difficulteId: 2,
+    reponses: [
+      { id: 5, texte: 'Océan Atlantique', estCorrecte: false },
+      { id: 6, texte: 'Océan Indien', estCorrecte: false },
+      { id: 7, texte: 'Océan Pacifique', estCorrecte: true },
+      { id: 8, texte: 'Océan Arctique', estCorrecte: false },
+    ],
+  },
+  {
+    id: 3,
+    enonce: 'En quelle année a commencé la Première Guerre mondiale ?',
+    explication: 'La Première Guerre mondiale a commencé en 1914.',
+    categorieId: 2,
+    difficulteId: 1,
+    reponses: [
+      { id: 9, texte: '1912', estCorrecte: false },
+      { id: 10, texte: '1914', estCorrecte: true },
+      { id: 11, texte: '1918', estCorrecte: false },
+      { id: 12, texte: '1939', estCorrecte: false },
+    ],
+  },
+  {
+    id: 4,
+    enonce: 'Qui était le premier président de la République française ?',
+    explication: 'Louis-Napoléon Bonaparte fut le premier président de la République française.',
+    categorieId: 2,
+    difficulteId: 3,
+    reponses: [
+      { id: 13, texte: 'Charles de Gaulle', estCorrecte: false },
+      { id: 14, texte: 'Louis-Napoléon Bonaparte', estCorrecte: true },
+      { id: 15, texte: 'Adolphe Thiers', estCorrecte: false },
+      { id: 16, texte: 'Jules Grévy', estCorrecte: false },
+    ],
+  },
+  {
+    id: 5,
+    enonce: 'Quelle planète est surnommée la planète rouge ?',
+    explication: 'Mars est surnommée la planète rouge.',
+    categorieId: 3,
+    difficulteId: 1,
+    reponses: [
+      { id: 17, texte: 'Vénus', estCorrecte: false },
+      { id: 18, texte: 'Mars', estCorrecte: true },
+      { id: 19, texte: 'Jupiter', estCorrecte: false },
+      { id: 20, texte: 'Saturne', estCorrecte: false },
+    ],
+  },
+  {
+    id: 6,
+    enonce: 'Quel est le symbole chimique de l’or ?',
+    explication: 'Le symbole chimique de l’or est Au.',
+    categorieId: 3,
+    difficulteId: 2,
+    reponses: [
+      { id: 21, texte: 'Ag', estCorrecte: false },
+      { id: 22, texte: 'Au', estCorrecte: true },
+      { id: 23, texte: 'Fe', estCorrecte: false },
+      { id: 24, texte: 'Or', estCorrecte: false },
+    ],
+  },
+  {
+    id: 7,
+    enonce: 'Combien de joueurs composent une équipe de football sur le terrain ?',
+    explication: 'Une équipe de football compte 11 joueurs sur le terrain.',
+    categorieId: 4,
+    difficulteId: 1,
+    reponses: [
+      { id: 25, texte: '9 joueurs', estCorrecte: false },
+      { id: 26, texte: '10 joueurs', estCorrecte: false },
+      { id: 27, texte: '11 joueurs', estCorrecte: true },
+      { id: 28, texte: '12 joueurs', estCorrecte: false },
+    ],
+  },
+  {
+    id: 8,
+    enonce: 'Quel pays a remporté la Coupe du monde de football en 2018 ?',
+    explication: 'La France a remporté la Coupe du monde de football en 2018.',
+    categorieId: 4,
+    difficulteId: 2,
+    reponses: [
+      { id: 29, texte: 'Brésil', estCorrecte: false },
+      { id: 30, texte: 'Allemagne', estCorrecte: false },
+      { id: 31, texte: 'France', estCorrecte: true },
+      { id: 32, texte: 'Argentine', estCorrecte: false },
+    ],
+  },
+  {
+    id: 9,
+    enonce: 'Qui a peint La Joconde ?',
+    explication: 'Léonard de Vinci est le peintre de La Joconde.',
+    categorieId: 5,
+    difficulteId: 1,
+    reponses: [
+      { id: 33, texte: 'Pablo Picasso', estCorrecte: false },
+      { id: 34, texte: 'Vincent van Gogh', estCorrecte: false },
+      { id: 35, texte: 'Léonard de Vinci', estCorrecte: true },
+      { id: 36, texte: 'Claude Monet', estCorrecte: false },
+    ],
+  },
+  {
+    id: 10,
+    enonce: 'Quel écrivain français a écrit Les Misérables ?',
+    explication: 'Victor Hugo est l’auteur du roman Les Misérables.',
+    categorieId: 5,
+    difficulteId: 2,
+    reponses: [
+      { id: 37, texte: 'Émile Zola', estCorrecte: false },
+      { id: 38, texte: 'Victor Hugo', estCorrecte: true },
+      { id: 39, texte: 'Albert Camus', estCorrecte: false },
+      { id: 40, texte: 'Molière', estCorrecte: false },
+    ],
+  },
+];
