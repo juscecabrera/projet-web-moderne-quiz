@@ -71,8 +71,8 @@ Après l'importation, la base contient :
 |---|---:|
 | Catégories | 5 |
 | Niveaux de difficulté | 5 |
-| Questions | 10 |
-| Propositions de réponses | 40 |
+| Questions | 12 |
+| Propositions de réponses | 48 |
 
 Les catégories disponibles sont : Géographie, Histoire, Sciences, Sport et Culture générale.
 
@@ -122,7 +122,7 @@ SELECT 'Reponses', COUNT(*)
 FROM reponses;
 ```
 
-Les résultats attendus sont : 5 catégories, 5 difficultés, 10 questions et 40 réponses.
+Les résultats attendus sont : 5 catégories, 5 difficultés, 12 questions et 48 réponses.
 
 ## 8. Intégration avec l'application
 

@@ -1,7 +1,16 @@
 (function (Quiz) {
   const h = Quiz.h;
 
-  Quiz.App = function App({ state, onSelectCategory, onStart, onAnswer, onNext, onRestart }) {
+  Quiz.App = function App({
+    state,
+    nombreQuestionsDisponibles,
+    onSelectCategory,
+    onSelectDifficulty,
+    onStart,
+    onAnswer,
+    onNext,
+    onRestart,
+  }) {
     if (state.status === 'loading') {
       return h('section', { className: 'screen' }, h('p', { className: 'loading' }, 'Chargement des questions…'));
     }
@@ -35,7 +44,10 @@
     return Quiz.HomeScreen({
       categories: state.categories,
       categorieId: state.categorieId,
+      difficulteIds: state.difficulteIds,
+      nombreQuestionsDisponibles,
       onSelectCategory,
+      onSelectDifficulty,
       onStart,
     });
   };

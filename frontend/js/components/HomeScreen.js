@@ -19,7 +19,26 @@
     );
   }
 
-  Quiz.HomeScreen = function HomeScreen({ categories, categorieId, onSelectCategory, onStart }) {
+  Quiz.HomeScreen = function HomeScreen({
+    categories,
+    categorieId,
+    difficulteIds,
+    nombreQuestionsDisponibles,
+    onSelectCategory,
+    onSelectDifficulty,
+    onStart,
+  }) {
+    const nombreQuestions = Math.min(
+      nombreQuestionsDisponibles,
+      Quiz.QUIZ_CONFIG.tailleDePartie,
+    );
+    const aideDifficulte =
+      nombreQuestionsDisponibles === 0
+        ? 'Aucune question ne correspond à cette catégorie et à ces niveaux.'
+        : `Choisissez un niveau ou combinez-en plusieurs. ${nombreQuestions} ${
+            nombreQuestions > 1 ? 'questions disponibles' : 'question disponible'
+          } dans cette partie.`;
+
     return h(
       'section',
       { className: 'screen home-screen' },
@@ -27,7 +46,7 @@
       h(
         'p',
         null,
-        `Répondez à ${Quiz.QUIZ_CONFIG.tailleDePartie} questions. Une seule réponse est possible par question.`,
+        `Jouez jusqu’à ${Quiz.QUIZ_CONFIG.tailleDePartie} questions. Une seule réponse est possible par question.`,
       ),
 
       h('h2', { className: 'section-title' }, 'Choisissez une catégorie'),
@@ -53,15 +72,37 @@
       ),
 
       h('h2', { className: 'section-title' }, 'Niveaux de difficulté'),
+      h('p', { className: 'difficulty-help' }, aideDifficulte),
       h(
         'ul',
         { className: 'difficultes' },
-        Quiz.DIFFICULTES.map((difficulte) => h('li', null, Quiz.DifficultyBadge({ difficulte }))),
+        Quiz.DIFFICULTES.map((difficulte) =>
+          h(
+            'li',
+            null,
+            h(
+              'label',
+              { className: 'difficulty-option' },
+              h('input', {
+                type: 'checkbox',
+                checked: difficulteIds.includes(difficulte.id),
+                'aria-label': difficulte.libelle,
+                onChange: () => onSelectDifficulty(difficulte.id),
+              }),
+              Quiz.DifficultyBadge({ difficulte }),
+            ),
+          ),
+        ),
       ),
 
       h(
         'button',
-        { type: 'button', className: 'btn btn-primary', onClick: () => onStart(categorieId) },
+        {
+          type: 'button',
+          className: 'btn btn-primary',
+          disabled: difficulteIds.length === 0 || nombreQuestionsDisponibles === 0,
+          onClick: () => onStart(categorieId, difficulteIds),
+        },
         'Lancer le quiz',
       ),
     );

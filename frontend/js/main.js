@@ -5,12 +5,13 @@
 
   const handlers = {
     onSelectCategory: (categorieId) => store.dispatch(actions.selectCategory(categorieId)),
+    onSelectDifficulty: (difficulteId) => store.dispatch(actions.toggleDifficulty(difficulteId)),
 
-    onStart: async (categorieId) => {
+    onStart: async (categorieId, difficulteIds) => {
       store.dispatch(actions.startRequested());
 
       try {
-        store.dispatch(actions.startSucceeded(await Quiz.api.getPartie(categorieId)));
+        store.dispatch(actions.startSucceeded(await Quiz.api.getPartie(categorieId, difficulteIds)));
       } catch (error) {
         store.dispatch(actions.requestFailed(error.message));
       }
@@ -36,7 +37,16 @@
   };
 
   function renderApp(state) {
-    root.replaceChildren(Quiz.App({ state, ...handlers }));
+    root.replaceChildren(
+      Quiz.App({
+        state,
+        nombreQuestionsDisponibles: Quiz.api.getNombreQuestionsDisponibles(
+          state.categorieId,
+          state.difficulteIds,
+        ),
+        ...handlers,
+      }),
+    );
   }
 
   store.subscribe(renderApp);

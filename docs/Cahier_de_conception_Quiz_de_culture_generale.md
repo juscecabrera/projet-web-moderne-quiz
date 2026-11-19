@@ -529,7 +529,7 @@ Projet final = compétition avancée + Ghost + ligues + tournois + exploration d
 
 - Combien de questions dans une partie ? 
 
-- Le joueur choisit-il la difficulté ou est-elle mélangée automatiquement ? 
+- Difficulté : le joueur peut choisir un niveau unique ou en combiner plusieurs. Par défaut, les cinq niveaux sont sélectionnés.
 
 - Le temps de réponse influence-t-il le score ? 
 

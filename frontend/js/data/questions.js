@@ -140,4 +140,30 @@ window.Quiz.QUESTIONS = [
       { id: 40, texte: 'Molière', estCorrecte: false },
     ],
   },
+  {
+    id: 11,
+    enonce: 'Quel traité signé en 1648 met fin à la guerre de Trente Ans ?',
+    explication: 'Les traités de Westphalie, signés en 1648, mettent fin à la guerre de Trente Ans.',
+    categorieId: 5,
+    difficulteId: 4,
+    reponses: [
+      { id: 41, texte: 'Le traité d’Utrecht', estCorrecte: false },
+      { id: 42, texte: 'Les traités de Westphalie', estCorrecte: true },
+      { id: 43, texte: 'Le traité de Versailles', estCorrecte: false },
+      { id: 44, texte: 'Le traité de Paris', estCorrecte: false },
+    ],
+  },
+  {
+    id: 12,
+    enonce: 'Quel mathématicien a démontré le dernier théorème de Fermat ?',
+    explication: 'Andrew Wiles a démontré le dernier théorème de Fermat dans les années 1990.',
+    categorieId: 5,
+    difficulteId: 5,
+    reponses: [
+      { id: 45, texte: 'Alan Turing', estCorrecte: false },
+      { id: 46, texte: 'David Hilbert', estCorrecte: false },
+      { id: 47, texte: 'Andrew Wiles', estCorrecte: true },
+      { id: 48, texte: 'Benoît Mandelbrot', estCorrecte: false },
+    ],
+  },
 ];

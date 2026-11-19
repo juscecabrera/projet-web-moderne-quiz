@@ -2,6 +2,7 @@
   const ACTION_TYPES = {
     CATEGORIES_LOADED: 'quiz/categoriesLoaded',
     CATEGORY_SELECTED: 'quiz/categorySelected',
+    DIFFICULTY_SELECTED: 'quiz/difficultySelected',
     START_REQUESTED: 'quiz/startRequested',
     START_SUCCEEDED: 'quiz/startSucceeded',
     ANSWER_REQUESTED: 'quiz/answerRequested',
@@ -15,6 +16,7 @@
     status: 'idle',
     categories: [],
     categorieId: null,
+    difficulteIds: Quiz.DIFFICULTES.map((difficulte) => difficulte.id),
     questions: [],
     currentIndex: 0,
     answers: [],
@@ -33,6 +35,7 @@
   const actions = {
     categoriesLoaded: (categories) => ({ type: ACTION_TYPES.CATEGORIES_LOADED, categories }),
     selectCategory: (categorieId) => ({ type: ACTION_TYPES.CATEGORY_SELECTED, categorieId }),
+    toggleDifficulty: (difficulteId) => ({ type: ACTION_TYPES.DIFFICULTY_SELECTED, difficulteId }),
     startRequested: () => ({ type: ACTION_TYPES.START_REQUESTED }),
     startSucceeded: (questions) => ({ type: ACTION_TYPES.START_SUCCEEDED, questions }),
     answerRequested: () => ({ type: ACTION_TYPES.ANSWER_REQUESTED }),
@@ -49,6 +52,15 @@
 
       case ACTION_TYPES.CATEGORY_SELECTED:
         return { ...state, categorieId: action.categorieId };
+
+      case ACTION_TYPES.DIFFICULTY_SELECTED: {
+        const isSelected = state.difficulteIds.includes(action.difficulteId);
+        const difficulteIds = isSelected
+          ? state.difficulteIds.filter((id) => id !== action.difficulteId)
+          : [...state.difficulteIds, action.difficulteId];
+
+        return { ...state, difficulteIds };
+      }
 
       case ACTION_TYPES.START_REQUESTED:
         return { ...state, status: 'loading', erreur: null };
@@ -88,7 +100,11 @@
       }
 
       case ACTION_TYPES.RESTART:
-        return { ...initialQuizState, categories: state.categories };
+        return {
+          ...initialQuizState,
+          categories: state.categories,
+          difficulteIds: state.difficulteIds,
+        };
 
       case ACTION_TYPES.FAILED:
         return { ...state, status: 'error', pending: false, erreur: action.message };

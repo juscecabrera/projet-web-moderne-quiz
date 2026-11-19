@@ -104,7 +104,17 @@ VALUES
 (10,
  'Quel écrivain français a écrit Les Misérables ?',
  'Victor Hugo est l’auteur du roman Les Misérables.',
- 5, 2, 'validee');
+ 5, 2, 'validee'),
+
+(11,
+ 'Quel traité signé en 1648 met fin à la guerre de Trente Ans ?',
+ 'Les traités de Westphalie, signés en 1648, mettent fin à la guerre de Trente Ans.',
+ 5, 4, 'validee'),
+
+(12,
+ 'Quel mathématicien a démontré le dernier théorème de Fermat ?',
+ 'Andrew Wiles a démontré le dernier théorème de Fermat dans les années 1990.',
+ 5, 5, 'validee');
 
 
 -- ============================================================
@@ -176,7 +186,19 @@ VALUES
 (10, 'Émile Zola', FALSE),
 (10, 'Victor Hugo', TRUE),
 (10, 'Albert Camus', FALSE),
-(10, 'Molière', FALSE);
+(10, 'Molière', FALSE),
+
+-- QUESTION 11 : TRAITES DE WESTPHALIE
+(11, 'Le traité d’Utrecht', FALSE),
+(11, 'Les traités de Westphalie', TRUE),
+(11, 'Le traité de Versailles', FALSE),
+(11, 'Le traité de Paris', FALSE),
+
+-- QUESTION 12 : DERNIER THEOREME DE FERMAT
+(12, 'Alan Turing', FALSE),
+(12, 'David Hilbert', FALSE),
+(12, 'Andrew Wiles', TRUE),
+(12, 'Benoît Mandelbrot', FALSE);
 
 
 -- ============================================================

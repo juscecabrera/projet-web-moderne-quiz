@@ -12,11 +12,11 @@ Le code utilise des scripts classiques, sans `import`/`export`, qui partagent un
 
 | Écran / élément | Fichier | Issue concerné | État |
 |---|---|---|---|
-| Accueil, liste des catégories, niveaux de difficulté, bouton de lancement | `components/HomeScreen.js` | US-01, US-02, US-03 | Interface seule |
-| Question, réponses, badge de difficulté, passage à la suivante | `components/QuestionScreen.js` | US-01, US-03 | Interface seule |
+| Accueil, liste des catégories, choix d'un ou plusieurs niveaux, bouton de lancement | `components/HomeScreen.js` | US-01, US-02, US-03 | Implémenté |
+| Question, réponses, badge de difficulté, passage à la suivante | `components/QuestionScreen.js` | US-01, US-03 | Implémenté |
 | Panneau de correction (bonne réponse, explication) | `components/FeedbackPanel.js` | US-06 | Interface seule |
 | Écran de fin | `components/ResultScreen.js` | US-05, US-07 | Squelette, à compléter |
-| Niveaux de difficulté | `components/DifficultyBadge.js` | US-03 | Affichage du libellé |
+| Niveaux de difficulté | `components/DifficultyBadge.js` | US-03 | Sélection à l'accueil et affichage pendant la partie |
 
 Les issues US-04 (points), US-05 (score, bonnes réponses, difficulté moyenne) et US-07 (statistiques) ne sont pas implémentés : ils doivent étendre les fichiers ci-dessus ou en ajouter.
 
@@ -26,7 +26,7 @@ Les issues US-04 (points), US-05 (score, bonnes réponses, difficulté moyenne) 
 |---|---|---|
 | `js/namespace.js` | Crée l'objet global `window.Quiz` | Module racine |
 | `js/data/questions.js` | Données de test (miroir de `database/donnees_test.sql`) : `Quiz.CATEGORIES`, `Quiz.QUESTIONS` | Données mockées |
-| `js/api/quizApi.js` | `Quiz.api` : `getCategories`, `getPartie`, `validerReponse` | Appels API (`fetch`) |
+| `js/api/quizApi.js` | `Quiz.api` : `getCategories`, `getPartie`, `getNombreQuestionsDisponibles`, `validerReponse`. La partie est filtrée et répartie selon les niveaux choisis. | Appels API (`fetch`) |
 | `js/config/quiz.config.js` | `Quiz.QUIZ_CONFIG`, `Quiz.DIFFICULTES`, `Quiz.getDifficulte` | Constantes / configuration |
 | `js/domain/quiz.js` | `Quiz.initialQuizState`, `Quiz.quizReducer`, `Quiz.actions`, sélecteurs | `useReducer` |
 | `js/core/store.js` | `Quiz.createStore` | Contexte / store |

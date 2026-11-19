@@ -60,6 +60,20 @@ body {
   gap: 0.5rem;
 }
 
+.difficulty-help {
+  margin: 0 0 0.75rem;
+  color: #6b7280;
+  font-size: 0.9rem;
+  text-align: left;
+}
+
+.difficulty-option {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  cursor: pointer;
+}
+
 .category {
   width: 100%;
   display: flex;
@@ -200,4 +214,10 @@ body {
 
 .btn-primary:hover {
   background: #4338ca;
+}
+
+.btn:disabled,
+.btn-primary:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
 }
