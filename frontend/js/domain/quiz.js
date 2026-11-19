@@ -54,6 +54,10 @@
         return { ...state, status: 'loading', erreur: null };
 
       case ACTION_TYPES.START_SUCCEEDED:
+        if (action.questions.length === 0) {
+          return { ...state, status: 'error', erreur: 'Aucune question disponible pour cette catégorie.' };
+        }
+
         return {
           ...state,
           status: 'playing',
@@ -88,7 +92,7 @@
       }
 
       case ACTION_TYPES.RESTART:
-        return { ...initialQuizState, categories: state.categories };
+        return { ...initialQuizState, categories: state.categories, categorieId: state.categorieId };
 
       case ACTION_TYPES.FAILED:
         return { ...state, status: 'error', pending: false, erreur: action.message };
