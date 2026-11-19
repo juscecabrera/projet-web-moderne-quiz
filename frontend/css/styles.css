@@ -31,10 +31,92 @@ body {
   margin-top: 0;
 }
 
+.section-title {
+  font-size: 1.1rem;
+  margin: 1.5rem 0 0.75rem;
+  text-align: left;
+}
+
+.loading {
+  color: #6b7280;
+}
+
+.categories,
+.difficultes,
+.answers {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.categories {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.difficultes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.category {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.2rem;
+  padding: 0.9rem 1rem;
+  font: inherit;
+  text-align: left;
+  border: 2px solid #d1d5db;
+  border-radius: 8px;
+  background: #ffffff;
+  cursor: pointer;
+}
+
+.category span {
+  color: #6b7280;
+  font-size: 0.9rem;
+}
+
+.category:hover {
+  border-color: #4f46e5;
+  background: #eef2ff;
+}
+
+.category--selected,
+.category--selected:hover {
+  border-color: #4f46e5;
+  background: #e0e7ff;
+}
+
+.badge {
+  display: inline-block;
+  padding: 0.25rem 0.7rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.badge--1 { background: #16a34a; }
+.badge--2 { background: #2563eb; }
+.badge--3 { background: #ea580c; }
+.badge--4 { background: #dc2626; }
+.badge--5 { background: #7c3aed; }
+
+.question-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
 .progress {
   color: #6b7280;
   font-size: 0.9rem;
-  margin-top: 0;
+  margin: 0;
 }
 
 .question {
@@ -43,17 +125,15 @@ body {
 }
 
 .answers {
-  list-style: none;
-  padding: 0;
-  margin: 0 0 1.5rem;
   display: grid;
   gap: 0.75rem;
+  margin-bottom: 1.5rem;
 }
 
 .answer {
   width: 100%;
   padding: 0.9rem 1rem;
-  font-size: 1rem;
+  font: inherit;
   border: 2px solid #d1d5db;
   border-radius: 8px;
   background: #ffffff;
@@ -70,16 +150,44 @@ body {
   cursor: default;
 }
 
-.answer--selected,
-.answer--selected:hover:not(:disabled) {
-  border-color: #4f46e5;
-  background: #e0e7ff;
-  font-weight: 600;
+.answer--correct,
+.answer--correct:disabled {
+  border-color: #16a34a;
+  background: #dcfce7;
+}
+
+.answer--wrong,
+.answer--wrong:disabled {
+  border-color: #dc2626;
+  background: #fee2e2;
+}
+
+.feedback {
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  text-align: left;
+}
+
+.feedback p {
+  margin: 0.3rem 0;
+}
+
+.feedback-titre {
+  font-weight: 700;
+}
+
+.feedback--correct {
+  background: #dcfce7;
+}
+
+.feedback--wrong {
+  background: #fee2e2;
 }
 
 .btn {
   padding: 0.8rem 1.6rem;
-  font-size: 1rem;
+  font: inherit;
   border: none;
   border-radius: 8px;
   cursor: pointer;

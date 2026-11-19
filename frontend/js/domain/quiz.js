@@ -1,119 +1,106 @@
-export const QUIZ_SIZE = 10;
-
-export const ACTION_TYPES = {
-  START: 'quiz/start',
-  ANSWER: 'quiz/answer',
-  NEXT: 'quiz/next',
-  RESTART: 'quiz/restart',
-};
-
-export const initialQuizState = {
-  status: 'idle',
-  questions: [],
-  currentIndex: 0,
-  answers: [],
-};
-
-export function shuffle(items, random = Math.random) {
-  const copy = [...items];
-
-  for (let i = copy.length - 1; i > 0; i--) {
-    const j = Math.floor(random() * (i + 1));
-    [copy[i], copy[j]] = [copy[j], copy[i]];
-  }
-
-  return copy;
-}
-
-export function toPlayerQuestion(question) {
-  return {
-    id: question.id,
-    enonce: question.enonce,
-    explication: question.explication,
-    categorieId: question.categorieId,
-    difficulteId: question.difficulteId,
-    reponses: question.reponses.map(({ id, texte }) => ({ id, texte })),
+(function (Quiz) {
+  const ACTION_TYPES = {
+    CATEGORIES_LOADED: 'quiz/categoriesLoaded',
+    CATEGORY_SELECTED: 'quiz/categorySelected',
+    START_REQUESTED: 'quiz/startRequested',
+    START_SUCCEEDED: 'quiz/startSucceeded',
+    ANSWER_REQUESTED: 'quiz/answerRequested',
+    ANSWER_SUCCEEDED: 'quiz/answerSucceeded',
+    NEXT: 'quiz/next',
+    RESTART: 'quiz/restart',
+    FAILED: 'quiz/failed',
   };
-}
 
-export function buildQuiz(questions, size = QUIZ_SIZE, random = Math.random) {
-  return shuffle(questions, random).slice(0, size).map(toPlayerQuestion);
-}
+  const initialQuizState = {
+    status: 'idle',
+    categories: [],
+    categorieId: null,
+    questions: [],
+    currentIndex: 0,
+    answers: [],
+    pending: false,
+    erreur: null,
+  };
 
-export function getCurrentQuestion(state) {
-  return state.questions[state.currentIndex];
-}
-
-export function hasAnswered(state) {
-  return state.answers.length > state.currentIndex;
-}
-
-export function getSelectedReponseId(state) {
-  return state.answers[state.currentIndex]?.reponseId;
-}
-
-export function startQuiz(questions) {
-  return { type: ACTION_TYPES.START, questions };
-}
-
-export function answerQuestion(reponseId) {
-  return { type: ACTION_TYPES.ANSWER, reponseId };
-}
-
-export function nextQuestion() {
-  return { type: ACTION_TYPES.NEXT };
-}
-
-export function restartQuiz() {
-  return { type: ACTION_TYPES.RESTART };
-}
-
-export function quizReducer(state, action) {
-  switch (action.type) {
-    case ACTION_TYPES.START:
-      return {
-        status: 'playing',
-        questions: action.questions,
-        currentIndex: 0,
-        answers: [],
-      };
-
-    case ACTION_TYPES.ANSWER: {
-      if (state.status !== 'playing' || hasAnswered(state)) {
-        return state;
-      }
-
-      const question = getCurrentQuestion(state);
-      const isValidReponse = question.reponses.some((reponse) => reponse.id === action.reponseId);
-
-      if (!isValidReponse) {
-        return state;
-      }
-
-      return {
-        ...state,
-        answers: [...state.answers, { questionId: question.id, reponseId: action.reponseId }],
-      };
-    }
-
-    case ACTION_TYPES.NEXT: {
-      if (state.status !== 'playing' || !hasAnswered(state)) {
-        return state;
-      }
-
-      const isLastQuestion = state.currentIndex === state.questions.length - 1;
-
-      if (isLastQuestion) {
-        return { ...state, status: 'finished' };
-      }
-
-      return { ...state, currentIndex: state.currentIndex + 1 };
-    }
-
-    case ACTION_TYPES.RESTART:
-      return initialQuizState;
-
-    default:
-      return state;
+  function getCurrentQuestion(state) {
+    return state.questions[state.currentIndex];
   }
-}
+
+  function getCurrentAnswer(state) {
+    return state.answers[state.currentIndex];
+  }
+
+  const actions = {
+    categoriesLoaded: (categories) => ({ type: ACTION_TYPES.CATEGORIES_LOADED, categories }),
+    selectCategory: (categorieId) => ({ type: ACTION_TYPES.CATEGORY_SELECTED, categorieId }),
+    startRequested: () => ({ type: ACTION_TYPES.START_REQUESTED }),
+    startSucceeded: (questions) => ({ type: ACTION_TYPES.START_SUCCEEDED, questions }),
+    answerRequested: () => ({ type: ACTION_TYPES.ANSWER_REQUESTED }),
+    answerSucceeded: (correction) => ({ type: ACTION_TYPES.ANSWER_SUCCEEDED, correction }),
+    nextQuestion: () => ({ type: ACTION_TYPES.NEXT }),
+    restartQuiz: () => ({ type: ACTION_TYPES.RESTART }),
+    requestFailed: (message) => ({ type: ACTION_TYPES.FAILED, message }),
+  };
+
+  function quizReducer(state, action) {
+    switch (action.type) {
+      case ACTION_TYPES.CATEGORIES_LOADED:
+        return { ...state, categories: action.categories };
+
+      case ACTION_TYPES.CATEGORY_SELECTED:
+        return { ...state, categorieId: action.categorieId };
+
+      case ACTION_TYPES.START_REQUESTED:
+        return { ...state, status: 'loading', erreur: null };
+
+      case ACTION_TYPES.START_SUCCEEDED:
+        return {
+          ...state,
+          status: 'playing',
+          questions: action.questions,
+          currentIndex: 0,
+          answers: [],
+          pending: false,
+        };
+
+      case ACTION_TYPES.ANSWER_REQUESTED:
+        if (state.status !== 'playing' || state.pending || getCurrentAnswer(state)) {
+          return state;
+        }
+
+        return { ...state, pending: true };
+
+      case ACTION_TYPES.ANSWER_SUCCEEDED:
+        return { ...state, pending: false, answers: [...state.answers, action.correction] };
+
+      case ACTION_TYPES.NEXT: {
+        if (state.status !== 'playing' || !getCurrentAnswer(state)) {
+          return state;
+        }
+
+        const isLastQuestion = state.currentIndex === state.questions.length - 1;
+
+        if (isLastQuestion) {
+          return { ...state, status: 'finished' };
+        }
+
+        return { ...state, currentIndex: state.currentIndex + 1 };
+      }
+
+      case ACTION_TYPES.RESTART:
+        return { ...initialQuizState, categories: state.categories };
+
+      case ACTION_TYPES.FAILED:
+        return { ...state, status: 'error', pending: false, erreur: action.message };
+
+      default:
+        return state;
+    }
+  }
+
+  Quiz.initialQuizState = initialQuizState;
+  Quiz.quizReducer = quizReducer;
+  Quiz.getCurrentQuestion = getCurrentQuestion;
+  Quiz.getCurrentAnswer = getCurrentAnswer;
+  Quiz.actions = actions;
+})(window.Quiz);

@@ -1,29 +1,49 @@
-import { createStore } from './core/store.js';
-import {
-  buildQuiz,
-  initialQuizState,
-  answerQuestion,
-  nextQuestion,
-  quizReducer,
-  restartQuiz,
-  startQuiz,
-} from './domain/quiz.js';
-import { QUESTIONS } from './data/questions.js';
-import { App } from './components/App.js';
+(function (Quiz) {
+  const { actions } = Quiz;
+  const root = document.getElementById('app');
+  const store = Quiz.createStore(Quiz.quizReducer, Quiz.initialQuizState);
 
-const root = document.getElementById('app');
-const store = createStore(quizReducer, initialQuizState);
+  const handlers = {
+    onSelectCategory: (categorieId) => store.dispatch(actions.selectCategory(categorieId)),
 
-const handlers = {
-  onStart: () => store.dispatch(startQuiz(buildQuiz(QUESTIONS))),
-  onAnswer: (reponseId) => store.dispatch(answerQuestion(reponseId)),
-  onNext: () => store.dispatch(nextQuestion()),
-  onRestart: () => store.dispatch(restartQuiz()),
-};
+    onStart: async (categorieId) => {
+      store.dispatch(actions.startRequested());
 
-function renderApp(state) {
-  root.replaceChildren(App({ state, ...handlers }));
-}
+      try {
+        store.dispatch(actions.startSucceeded(await Quiz.api.getPartie(categorieId)));
+      } catch (error) {
+        store.dispatch(actions.requestFailed(error.message));
+      }
+    },
 
-store.subscribe(renderApp);
-renderApp(store.getState());
+    onAnswer: async (reponseId) => {
+      if (store.getState().pending) {
+        return;
+      }
+
+      const question = Quiz.getCurrentQuestion(store.getState());
+      store.dispatch(actions.answerRequested());
+
+      try {
+        store.dispatch(actions.answerSucceeded(await Quiz.api.validerReponse(question.id, reponseId)));
+      } catch (error) {
+        store.dispatch(actions.requestFailed(error.message));
+      }
+    },
+
+    onNext: () => store.dispatch(actions.nextQuestion()),
+    onRestart: () => store.dispatch(actions.restartQuiz()),
+  };
+
+  function renderApp(state) {
+    root.replaceChildren(Quiz.App({ state, ...handlers }));
+  }
+
+  store.subscribe(renderApp);
+  renderApp(store.getState());
+
+  Quiz.api
+    .getCategories()
+    .then((categories) => store.dispatch(actions.categoriesLoaded(categories)))
+    .catch((error) => store.dispatch(actions.requestFailed(error.message)));
+})(window.Quiz);

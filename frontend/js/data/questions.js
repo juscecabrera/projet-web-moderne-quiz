@@ -1,7 +1,15 @@
 // Données de test, miroir de database/donnees_test.sql.
 // Quand le backend existera, ce fichier sera remplacé par un appel à l'API.
 
-export const QUESTIONS = [
+window.Quiz.CATEGORIES = [
+  { id: 1, nom: 'Géographie', description: 'Pays, capitales et continents' },
+  { id: 2, nom: 'Histoire', description: 'Événements et personnages historiques' },
+  { id: 3, nom: 'Sciences', description: 'Sciences et découvertes' },
+  { id: 4, nom: 'Sport', description: 'Sports et compétitions' },
+  { id: 5, nom: 'Culture générale', description: 'Connaissances variées' },
+];
+
+window.Quiz.QUESTIONS = [
   {
     id: 1,
     enonce: 'Quelle est la capitale du Togo ?',
