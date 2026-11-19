@@ -27,7 +27,7 @@
       h(
         'p',
         null,
-        `Répondez à ${Quiz.QUIZ_CONFIG.tailleDePartie} questions. Une seule réponse est possible par question.`,
+        `Une partie comporte jusqu'à ${Quiz.QUIZ_CONFIG.tailleDePartie} questions. Une seule réponse est possible par question.`,
       ),
 
       h('h2', { className: 'section-title' }, 'Choisissez une catégorie'),
