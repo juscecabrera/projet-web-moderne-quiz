@@ -38,7 +38,11 @@
     }
 
     if (state.status === 'finished') {
-      return Quiz.ResultScreen({ results: Quiz.getQuizResults(state), onRestart });
+      return Quiz.ResultScreen({
+        results: Quiz.getQuizResults(state),
+        statistiques: Quiz.getStatistiques(state.historique, state.categories),
+        onRestart,
+      });
     }
 
     return Quiz.HomeScreen({

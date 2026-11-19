@@ -1,7 +1,11 @@
 (function (Quiz) {
   const { actions } = Quiz;
   const root = document.getElementById('app');
-  const store = Quiz.createStore(Quiz.quizReducer, Quiz.initialQuizState);
+  const store = Quiz.createStore(Quiz.quizReducer, {
+    ...Quiz.initialQuizState,
+    historique: Quiz.loadHistorique(),
+  });
+  let historiqueSauvegarde = store.getState().historique;
 
   const handlers = {
     onSelectCategory: (categorieId) => store.dispatch(actions.selectCategory(categorieId)),
@@ -49,6 +53,12 @@
     );
   }
 
+  store.subscribe((state) => {
+    if (state.historique !== historiqueSauvegarde) {
+      historiqueSauvegarde = state.historique;
+      Quiz.saveHistorique(state.historique);
+    }
+  });
   store.subscribe(renderApp);
   renderApp(store.getState());
 

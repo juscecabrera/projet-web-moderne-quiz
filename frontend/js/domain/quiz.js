@@ -22,6 +22,7 @@
     answers: [],
     pending: false,
     erreur: null,
+    historique: [],
   };
 
   function getCurrentQuestion(state) {
@@ -122,7 +123,17 @@
         const isLastQuestion = state.currentIndex === state.questions.length - 1;
 
         if (isLastQuestion) {
-          return { ...state, status: 'finished' };
+          const reponsesPartie = state.answers.map((answer, index) => ({
+            categorieId: state.questions[index].categorieId,
+            difficulteId: state.questions[index].difficulteId,
+            estCorrecte: answer.estCorrecte,
+          }));
+
+          return {
+            ...state,
+            status: 'finished',
+            historique: [...state.historique, ...reponsesPartie],
+          };
         }
 
         return { ...state, currentIndex: state.currentIndex + 1 };
@@ -134,6 +145,7 @@
           categories: state.categories,
           categorieId: state.categorieId,
           difficulteIds: state.difficulteIds,
+          historique: state.historique,
         };
 
       case ACTION_TYPES.FAILED:
