@@ -15,12 +15,12 @@ Le code utilise des scripts classiques, sans `import`/`export`, qui partagent un
 | Accueil, liste des catégories, choix d'un ou plusieurs niveaux, bouton de lancement | `components/HomeScreen.js` | US-01, US-02, US-03 | Implémenté |
 | Question, réponses, badge de difficulté, passage à la suivante | `components/QuestionScreen.js` | US-01, US-03 | Implémenté |
 | Panneau de correction (bonne réponse, explication) | `components/FeedbackPanel.js` | US-06 | Interface seule |
-| Écran de fin | `components/ResultScreen.js` | US-05, US-07 | Squelette, à compléter |
+| Écran de fin : score, bonnes réponses, difficulté moyenne, performances par catégorie et par difficulté | `components/ResultScreen.js` | US-05, US-07 | Implémenté |
 | Niveaux de difficulté | `components/DifficultyBadge.js` | US-03 | Sélection à l'accueil et affichage pendant la partie |
 
 L’écran de résultat (US-POC-05) affiche le score final, le nombre de bonnes réponses sur le total et la difficulté moyenne. Le score du POC utilise une base de 1 point par bonne réponse, pondérée par le multiplicateur de difficulté. La difficulté moyenne est calculée sur les niveaux des questions jouées, de 1 à 5.
 
-Les statistiques par catégorie (US-POC-07) restent à implémenter.
+Les performances (US-POC-07) sont calculées à partir de l'historique des parties terminées (`js/domain/stats.js`) : taux de bonnes réponses par catégorie et par difficulté, avec la catégorie la plus forte et la plus faible. L'historique est conservé dans le `localStorage` du navigateur (`js/core/storage.js`), donc il survit à un rechargement de la page. Côté backend, il faudra le remplacer par les parties enregistrées en base.
 
 ## Organisation
 
@@ -31,6 +31,8 @@ Les statistiques par catégorie (US-POC-07) restent à implémenter.
 | `js/api/quizApi.js` | `Quiz.api` : `getCategories`, `getPartie`, `getNombreQuestionsDisponibles`, `validerReponse`. La partie est filtrée et répartie selon les niveaux choisis. | Appels API (`fetch`) |
 | `js/config/quiz.config.js` | `Quiz.QUIZ_CONFIG`, `Quiz.DIFFICULTES`, `Quiz.getDifficulte` | Constantes / configuration |
 | `js/domain/quiz.js` | `Quiz.initialQuizState`, `Quiz.quizReducer`, `Quiz.actions`, sélecteurs | `useReducer` |
+| `js/domain/stats.js` | `Quiz.getStatistiques` : taux par catégorie et par difficulté, catégorie la plus forte et la plus faible | Sélecteur (`useMemo`) |
+| `js/core/storage.js` | `Quiz.loadHistorique` / `Quiz.saveHistorique` : persistance de l'historique dans le `localStorage` | Persistance (à remplacer par l'API) |
 | `js/core/store.js` | `Quiz.createStore` | Contexte / store |
 | `js/core/h.js` | `Quiz.h` : création d'éléments DOM | `React.createElement` / JSX |
 | `js/components/*.js` | `Quiz.App`, `Quiz.HomeScreen`, etc. : reçoivent leurs données et callbacks en `props` | Composants |
