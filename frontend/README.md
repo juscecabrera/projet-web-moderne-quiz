@@ -18,7 +18,9 @@ Le code utilise des scripts classiques, sans `import`/`export`, qui partagent un
 | Écran de fin | `components/ResultScreen.js` | US-05, US-07 | Squelette, à compléter |
 | Niveaux de difficulté | `components/DifficultyBadge.js` | US-03 | Sélection à l'accueil et affichage pendant la partie |
 
-Les issues US-04 (points), US-05 (score, bonnes réponses, difficulté moyenne) et US-07 (statistiques) ne sont pas implémentés : ils doivent étendre les fichiers ci-dessus ou en ajouter.
+L’écran de résultat (US-POC-05) affiche le score final, le nombre de bonnes réponses sur le total et la difficulté moyenne. Le score du POC utilise une base de 1 point par bonne réponse, pondérée par le multiplicateur de difficulté. La difficulté moyenne est calculée sur les niveaux des questions jouées, de 1 à 5.
+
+Les statistiques par catégorie (US-POC-07) restent à implémenter.
 
 ## Organisation
 

@@ -32,6 +32,31 @@
     return state.answers[state.currentIndex];
   }
 
+  function getQuizResults(state) {
+    let score = 0;
+    let bonnesReponses = 0;
+    let sommeDifficultes = 0;
+
+    state.answers.forEach((answer, index) => {
+      const difficulte = Quiz.getDifficulte(state.questions[index].difficulteId);
+      sommeDifficultes += difficulte.id;
+
+      if (answer.estCorrecte) {
+        bonnesReponses += 1;
+        score += difficulte.multiplicateur;
+      }
+    });
+
+    const total = state.answers.length;
+
+    return {
+      score,
+      bonnesReponses,
+      total,
+      difficulteMoyenne: total > 0 ? sommeDifficultes / total : null,
+    };
+  }
+
   const actions = {
     categoriesLoaded: (categories) => ({ type: ACTION_TYPES.CATEGORIES_LOADED, categories }),
     selectCategory: (categorieId) => ({ type: ACTION_TYPES.CATEGORY_SELECTED, categorieId }),
@@ -66,6 +91,10 @@
         return { ...state, status: 'loading', erreur: null };
 
       case ACTION_TYPES.START_SUCCEEDED:
+        if (action.questions.length === 0) {
+          return { ...state, status: 'error', erreur: 'Aucune question disponible pour cette catégorie.' };
+        }
+
         return {
           ...state,
           status: 'playing',
@@ -103,6 +132,7 @@
         return {
           ...initialQuizState,
           categories: state.categories,
+          categorieId: state.categorieId,
           difficulteIds: state.difficulteIds,
         };
 
@@ -118,5 +148,6 @@
   Quiz.quizReducer = quizReducer;
   Quiz.getCurrentQuestion = getCurrentQuestion;
   Quiz.getCurrentAnswer = getCurrentAnswer;
+  Quiz.getQuizResults = getQuizResults;
   Quiz.actions = actions;
 })(window.Quiz);
