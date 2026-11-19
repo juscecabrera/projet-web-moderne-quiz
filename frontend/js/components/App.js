@@ -29,7 +29,7 @@
     }
 
     if (state.status === 'finished') {
-      return Quiz.ResultScreen({ onRestart });
+      return Quiz.ResultScreen({ results: Quiz.getQuizResults(state), onRestart });
     }
 
     return Quiz.HomeScreen({
