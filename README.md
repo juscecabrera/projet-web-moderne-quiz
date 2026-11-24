@@ -2,7 +2,7 @@
 
 ## 1. Présentation
 
-Ce dossier contient les scripts SQL nécessaires à l'installation de la base de données de notre application web de quiz de culture générale.
+Ce dépôt contient le quiz de culture générale, ses pages PHP et les scripts SQL d’installation.
 
 La base de données permet de gérer les utilisateurs, les catégories, les niveaux de difficulté, les questions, les propositions de réponses et les parties jouées.
 
@@ -16,6 +16,7 @@ La base de données permet de gérer les utilisateurs, les catégories, les nive
 |---|---|
 | `schema.sql` | Création des tables et de leurs relations |
 | `donnees_test.sql` | Insertion des catégories, difficultés, questions et réponses |
+| `migration_scores_decimaux.sql` | Migration des scores pour une base déjà installée |
 
 ## 3. Structure de la base de données
 
@@ -54,6 +55,8 @@ Démarrer WAMP et vérifier que le service MySQL fonctionne.
 
 Le script crée la base `quiz_culture_generale` et ses sept tables.
 
+Si la base existe déjà avec des scores entiers, importer `database/migration_scores_decimaux.sql` pour conserver les demi-points.
+
 ### Étape 3 — Ajouter les données de test
 
 1. Sélectionner la base `quiz_culture_generale` dans phpMyAdmin.
@@ -62,6 +65,18 @@ Le script crée la base `quiz_culture_generale` et ses sept tables.
 4. Lancer l'importation.
 
 **Attention :** importer les données de test une seule fois, dans une base vide, afin d'éviter les doublons.
+
+### Lancer le parcours PHP en local
+
+Avec PHP 8.2 et les extensions `pdo_mysql` et `mbstring`, lancer depuis la racine du dépôt :
+
+```sh
+php -S 127.0.0.1:8080 -t frontend
+```
+
+Ouvrir [le quiz](http://127.0.0.1:8080/) et cliquer sur **Créer un compte**.
+La configuration locale par défaut utilise MySQL sur `127.0.0.1:3306` avec la base `quiz_culture_generale` et l’utilisateur `root` sans mot de passe.
+Définir `QUIZ_DB_HOST`, `QUIZ_DB_PORT`, `QUIZ_DB_NAME`, `QUIZ_DB_USER` et `QUIZ_DB_PASSWORD` si nécessaire.
 
 ## 5. Données disponibles
 
@@ -126,20 +141,8 @@ Les résultats attendus sont : 5 catégories, 5 difficultés, 96 questions et 38
 
 ## 8. Intégration avec l'application
 
-La base de données est destinée à être utilisée par le backend de l'application.
+Le parcours PHP utilise la session pour identifier le joueur, charge les thèmes et les questions depuis MySQL, puis corrige et enregistre les réponses côté serveur. Le bilan charge la partie terminée et vérifie qu’elle appartient au compte connecté.
 
-Le backend devra notamment :
+La partie propose jusqu’à dix questions du thème, réparties entre les difficultés disponibles. Les propositions sont affichées avant la correction. Le score est calculé à partir des multiplicateurs de difficulté enregistrés dans MySQL.
 
-- Récupérer les questions selon leur catégorie et leur difficulté.
-- Fournir les propositions de réponses au frontend.
-- Vérifier les réponses des joueurs.
-- Calculer les scores.
-- Enregistrer les parties et les résultats.
-
-Les bonnes réponses ne doivent pas être transmises au frontend avant la validation de la réponse du joueur.
-
-## 9. État d'avancement
-
-La structure initiale de la base de données et les données de test ont été préparées.
-
-L'intégration avec le backend et les tests fonctionnels complets restent à réaliser.
+Le prototype JavaScript reste accessible via `frontend/index.html`.
