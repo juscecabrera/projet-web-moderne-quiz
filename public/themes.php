@@ -11,22 +11,18 @@ $error = '';
 $limit = quiz_game_limit();
 try {
     $database = quiz_database();
-    $categories = $database->query(
-        "SELECT id_categorie, nom_categorie, description FROM categories
-         WHERE nom_categorie IN ('Géographie', 'Sciences') ORDER BY nom_categorie"
-    );
+    $categories = quiz_themes($database);
     foreach ($categories as $category) {
         $themes[$category['id_categorie']] = $category + ['niveaux' => []];
     }
     $counts = $database->query(
-        'SELECT q.id_categorie, d.libelle, COUNT(*) AS total
-         FROM questions q JOIN difficultes d ON d.id_difficulte = q.id_difficulte
-         WHERE ' . QUIZ_PLAYABLE_QUESTION . '
-         GROUP BY q.id_categorie, d.id_difficulte, d.libelle ORDER BY d.id_difficulte'
+        'SELECT q.id_categorie, q.id_difficulte, COUNT(*) AS total
+         FROM questions q WHERE q.id_difficulte IN (1, 2, 3) AND ' . QUIZ_PLAYABLE_QUESTION . '
+         GROUP BY q.id_categorie, q.id_difficulte'
     );
     foreach ($counts as $count) {
         if (isset($themes[$count['id_categorie']])) {
-            $themes[$count['id_categorie']]['niveaux'][$count['libelle']] = (int) $count['total'];
+            $themes[$count['id_categorie']]['niveaux'][$count['id_difficulte']] = (int) $count['total'];
         }
     }
 } catch (PDOException $exception) {
@@ -59,14 +55,20 @@ try {
                         <h2><?= quiz_escape($theme['nom_categorie']) ?></h2>
                         <?php if ($theme['niveaux']): ?>
                             <p><?= quiz_escape($theme['description'] ?? '') ?></p>
-                            <ul>
-                                <?php foreach ($theme['niveaux'] as $level => $count): ?>
-                                    <li><?= quiz_escape($level) ?> · <?= $count ?></li>
-                                <?php endforeach; ?>
-                            </ul>
                             <form action="partie.php?theme_id=<?= (int) $theme['id_categorie'] ?>" method="post">
                                 <input type="hidden" name="csrf_token" value="<?= quiz_csrf_token() ?>">
                                 <input type="hidden" name="action" value="start">
+                                <label>Difficulté · <?= quiz_escape($theme['nom_categorie']) ?>
+                                    <select name="level" required>
+                                        <option value="">Choisir une difficulté</option>
+                                        <?php foreach (QUIZ_LEVELS as $levelId => $level): ?>
+                                            <?php $count = $theme['niveaux'][$levelId] ?? 0; ?>
+                                            <option value="<?= $levelId ?>" <?= $count === 0 ? 'disabled' : '' ?>>
+                                                <?= quiz_escape($level) ?> · <?= $count ?> question(s)
+                                            </option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </label>
                                 <button class="btn btn-primary" type="submit">Commencer <?= quiz_escape($theme['nom_categorie']) ?></button>
                             </form>
                         <?php else: ?>

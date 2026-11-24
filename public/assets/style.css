@@ -351,3 +351,59 @@ body {
 .account-panel .btn:disabled {
   cursor: not-allowed;
 }
+
+.account-panel select {
+  padding: 0.65rem;
+  font: inherit;
+}
+
+.profile-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+  gap: 1.5rem;
+}
+
+.profile-layout aside {
+  border-right: 1px solid #d1d5db;
+  padding-right: 1rem;
+}
+
+.profile-layout nav {
+  display: grid;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.profile-layout [aria-current="page"] {
+  font-weight: 700;
+}
+
+.quiz-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1.5rem;
+}
+
+.quiz-table th,
+.quiz-table td {
+  padding: 0.65rem;
+  text-align: left;
+  border-bottom: 1px solid #d1d5db;
+  overflow-wrap: anywhere;
+}
+
+.abandon-form {
+  margin-top: 1.25rem;
+}
+
+@media (max-width: 520px) {
+  .profile-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-layout aside {
+    border-right: 0;
+    border-bottom: 1px solid #d1d5db;
+    padding: 0 0 1rem;
+  }
+}

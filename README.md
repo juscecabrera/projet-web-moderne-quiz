@@ -16,6 +16,7 @@ La base de données permet de gérer les utilisateurs, les catégories, les nive
 |---|---|
 | `schema.sql` | Création des tables et de leurs relations |
 | `donnees_test.sql` | Insertion des catégories, difficultés, questions et réponses |
+| `questions_niveaux.sql` | Ajout des questions de Géographie et de Sciences par difficulté |
 | `migration_scores_decimaux.sql` | Migration des scores pour une base déjà installée |
 
 ## 3. Structure de la base de données
@@ -65,6 +66,8 @@ Si la base existe déjà avec des scores entiers, importer `database/migration_s
 4. Lancer l'importation.
 
 **Attention :** importer les données de test une seule fois, dans une base vide, afin d'éviter les doublons.
+
+Importer ensuite `database/questions_niveaux.sql`. Ce script est réimportable et s’applique aussi aux bases déjà remplies. Il ajoute 32 questions pour proposer au moins dix questions en Facile, Moyen et Difficile dans chacun des deux thèmes jouables.
 
 ### Lancer le parcours PHP en local
 
@@ -140,12 +143,12 @@ SELECT 'Reponses', COUNT(*)
 FROM reponses;
 ```
 
-Les résultats attendus sont : 5 catégories, 5 difficultés, 96 questions et 384 réponses.
+Le jeu de données initial contient 5 catégories, 5 difficultés, 96 questions et 384 réponses. Après l’import des questions complémentaires, il contient **128 questions et 512 réponses**.
 
 ## 8. Intégration avec l'application
 
 Le parcours PHP utilise la session pour identifier le joueur, charge les thèmes et les questions depuis MySQL, puis corrige et enregistre les réponses côté serveur. Le bilan charge la partie terminée et vérifie qu’elle appartient au compte connecté.
 
-La partie propose jusqu’à dix questions du thème, réparties entre les difficultés disponibles. Les propositions sont affichées avant la correction. Le score est calculé à partir des multiplicateurs de difficulté enregistrés dans MySQL.
+La partie tire jusqu’à dix questions du thème et de la difficulté choisis. Les propositions sont affichées avant la correction. Le score en points utilise les multiplicateurs de difficulté de MySQL. Le classement compare le taux de réussite, indépendamment des points. Seules les parties terminées de dix questions comptent, avec le meilleur résultat par joueur et par thème. Deux taux égaux partagent le même rang.
 
 Le prototype JavaScript reste accessible via `public/index.html`. Voir le [flux du quiz](docs/flux-quiz.md) et les [contrôles de livraison](tests/recette.md).

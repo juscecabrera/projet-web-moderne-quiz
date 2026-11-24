@@ -32,31 +32,34 @@ if (!$themeId) {
             $game = null;
         }
         $action = $isPost ? quiz_input('action') : '';
-        if ($game && $action === 'start') {
-            if (count(quiz_game_answers($database, $game['id'])) < count($game['questions'])) {
-                quiz_redirect($url);
-            }
-            $game = null;
-        }
 
         if (!$theme) {
             http_response_code(404);
             $error = 'Ce thème est introuvable.';
-        } elseif ($action === 'start' && !$game) {
-            $questions = quiz_game_questions($database, $themeId);
-            if ($questions) {
-                quiz_game_start($database, $userId, $themeId, $questions);
-                quiz_redirect($url);
+        } elseif ($action === 'start') {
+            $level = filter_input(INPUT_POST, 'level', FILTER_VALIDATE_INT);
+            if (!isset(QUIZ_LEVELS[$level])) {
+                http_response_code(400);
+                $error = 'Choisissez une difficulté depuis la page des thèmes.';
+            } else {
+                if ($game && ($game['level'] ?? null) === $level &&
+                    count(quiz_game_answers($database, $game['id'])) < count($game['questions'])) {
+                    quiz_redirect($url);
+                }
+                $questions = quiz_game_questions($database, $themeId, $level);
+                if ($questions) {
+                    quiz_game_start($database, $userId, $themeId, $level, $questions);
+                    quiz_redirect($url);
+                }
+                http_response_code(404);
+                $error = 'Aucune question disponible pour cette difficulté.';
             }
-            http_response_code(404);
-            $error = 'Aucune question disponible pour ce thème.';
         } elseif (!$game) {
             if ($isPost) {
                 http_response_code(409);
                 $error = 'Cette partie n’est plus active. Retournez aux thèmes pour en lancer une autre.';
-            } elseif (!quiz_game_questions($database, $themeId)) {
-                http_response_code(404);
-                $error = 'Aucune question disponible pour ce thème.';
+            } else {
+                quiz_redirect('themes.php');
             }
         } else {
             $gameId = $game['id'];
@@ -68,6 +71,15 @@ if (!$themeId) {
             $requestedCorrection = filter_input(INPUT_GET, 'correction', FILTER_VALIDATE_INT);
             $questionId = $game['questions'][$index] ?? null;
 
+            if ($action === 'abandon') {
+                if (filter_input(INPUT_POST, 'partie_id', FILTER_VALIDATE_INT) !== $gameId) {
+                    http_response_code(409);
+                    exit('Cette partie n’est plus active.');
+                }
+                quiz_game_abandon($database, $userId, $gameId);
+                unset($_SESSION['quiz_game']);
+                quiz_redirect('themes.php');
+            }
             if ($action === 'answer') {
                 $postedGame = filter_input(INPUT_POST, 'partie_id', FILTER_VALIDATE_INT);
                 $postedQuestion = filter_input(INPUT_POST, 'question_id', FILTER_VALIDATE_INT);
@@ -151,7 +163,7 @@ if (!$themeId) {
                 <?php endif; ?>
         <?php elseif ($question): ?>
             <p>Question <?= $index + 1 ?> sur <?= $total ?></p>
-            <p>Difficulté : <?= quiz_escape($question['libelle']) ?></p>
+            <p>Difficulté : <?= quiz_escape(QUIZ_LEVELS[$game['level'] ?? 0] ?? $question['libelle']) ?></p>
             <h2 id="question"><?= quiz_escape($question['enonce']) ?></h2>
             <form method="post" aria-labelledby="question" data-answer-form>
                 <input type="hidden" name="csrf_token" value="<?= quiz_csrf_token() ?>">
@@ -166,11 +178,13 @@ if (!$themeId) {
                 <?php endforeach; ?>
                 <button class="btn btn-primary" type="submit">Valider</button>
             </form>
-        <?php elseif ($error === ''): ?>
-            <form method="post">
+        <?php endif; ?>
+        <?php if (($question || $correction) && $index < $total): ?>
+            <form method="post" class="abandon-form">
                 <input type="hidden" name="csrf_token" value="<?= quiz_csrf_token() ?>">
-                <input type="hidden" name="action" value="start">
-                <button class="btn btn-primary" type="submit">Lancer le quiz</button>
+                <input type="hidden" name="action" value="abandon">
+                <input type="hidden" name="partie_id" value="<?= $gameId ?>">
+                <button class="btn" type="submit">Abandonner la partie</button>
             </form>
         <?php endif; ?>
         <p><a href="themes.php">Retour aux thèmes</a></p>
