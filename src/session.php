@@ -25,6 +25,13 @@ function quiz_require_user(): int
     return $_SESSION['user_id'];
 }
 
+function quiz_sign_in(int $userId, string $pseudo): never
+{
+    session_regenerate_id(true);
+    $_SESSION = ['user_id' => $userId, 'pseudo' => $pseudo];
+    quiz_redirect('accueil.php');
+}
+
 function quiz_csrf_token(): string
 {
     return $_SESSION['csrf_token'] ??= bin2hex(random_bytes(32));

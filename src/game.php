@@ -1,6 +1,17 @@
 <?php
 declare(strict_types=1);
 
+const QUIZ_PLAYABLE_QUESTION = "q.statut_validation = 'validee'
+    AND EXISTS (SELECT 1 FROM reponses r WHERE r.id_question = q.id_question
+                GROUP BY r.id_question HAVING COUNT(*) = 4 AND SUM(r.est_correcte = 1) = 1)";
+
+function quiz_game_limit(): int
+{
+    return filter_var(getenv('QUIZ_QUESTION_LIMIT'), FILTER_VALIDATE_INT, [
+        'options' => ['min_range' => 1, 'max_range' => 10],
+    ]) ?: 10;
+}
+
 function quiz_game_theme(PDO $database, int $themeId): array|false
 {
     $statement = $database->prepare('SELECT nom_categorie FROM categories WHERE id_categorie = ?');
@@ -11,18 +22,17 @@ function quiz_game_theme(PDO $database, int $themeId): array|false
 function quiz_game_questions(PDO $database, int $themeId): array
 {
     $statement = $database->prepare(
-        "SELECT id_question FROM (
+        'SELECT id_question FROM (
              SELECT q.id_question, q.id_difficulte,
                     ROW_NUMBER() OVER (PARTITION BY q.id_difficulte ORDER BY q.id_question) AS rang
              FROM questions q
-             INNER JOIN reponses r ON r.id_question = q.id_question
-             WHERE q.id_categorie = ? AND q.statut_validation = 'validee'
-             GROUP BY q.id_question
-             HAVING COUNT(*) >= 2 AND SUM(r.est_correcte = 1) = 1
+             WHERE q.id_categorie = :theme AND ' . QUIZ_PLAYABLE_QUESTION . '
          ) AS questions_jouables
-         ORDER BY rang, id_difficulte LIMIT 10"
+         ORDER BY rang, id_difficulte LIMIT :limite'
     );
-    $statement->execute([$themeId]);
+    $statement->bindValue('theme', $themeId, PDO::PARAM_INT);
+    $statement->bindValue('limite', quiz_game_limit(), PDO::PARAM_INT);
+    $statement->execute();
     return array_map('intval', $statement->fetchAll(PDO::FETCH_COLUMN));
 }
 
@@ -134,4 +144,23 @@ function quiz_game_details(PDO $database, int $gameId, ?int $questionId = null):
 function quiz_game_points(string $value): string
 {
     return str_replace('.', ',', str_contains($value, '.') ? rtrim(rtrim($value, '0'), '.') : $value);
+}
+
+function quiz_game_results(PDO $database, int $userId, ?int $gameId = null): array
+{
+    $sql = "SELECT p.id_partie, p.score_total, p.nombre_bonnes_reponses, p.date_fin,
+                   COUNT(r.id_question) AS total, MIN(c.nom_categorie) AS theme
+            FROM parties p
+            LEFT JOIN reponses_joueurs r ON r.id_partie = p.id_partie
+            LEFT JOIN questions q ON q.id_question = r.id_question
+            LEFT JOIN categories c ON c.id_categorie = q.id_categorie
+            WHERE p.id_utilisateur = ? AND p.statut = 'terminee'";
+    $params = [$userId];
+    if ($gameId !== null) {
+        $sql .= ' AND p.id_partie = ?';
+        $params[] = $gameId;
+    }
+    $statement = $database->prepare($sql . ' GROUP BY p.id_partie ORDER BY p.date_fin DESC, p.id_partie DESC');
+    $statement->execute($params);
+    return $statement->fetchAll(PDO::FETCH_ASSOC);
 }

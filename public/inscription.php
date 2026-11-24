@@ -1,8 +1,8 @@
 <?php
 declare(strict_types=1);
 
-require __DIR__ . '/includes/session.php';
-require __DIR__ . '/includes/database.php';
+require __DIR__ . '/../src/session.php';
+require __DIR__ . '/../src/database.php';
 
 if (isset($_SESSION['user_id'])) {
     quiz_redirect('accueil.php');
@@ -16,8 +16,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $pseudo = trim(quiz_input('pseudo'));
     $email = trim(quiz_input('email'));
     $password = quiz_input('password');
+    $confirmation = quiz_input('password_confirmation');
 
-    if ($pseudo === '' || mb_strlen($pseudo) > 50) {
+    if ($pseudo === '' || $email === '' || $password === '' || $confirmation === '') {
+        $error = 'Remplissez tous les champs.';
+    } elseif ($password !== $confirmation) {
+        $error = 'Les mots de passe ne correspondent pas.';
+    } elseif (mb_strlen($pseudo) > 50) {
         $error = 'Saisissez un pseudo de 1 à 50 caractères.';
     } elseif (strlen($email) > 150 || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $error = 'Saisissez une adresse e-mail valide.';
@@ -25,12 +30,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error = 'Saisissez un mot de passe d’au moins 8 caractères et de 72 octets maximum.';
     } else {
         try {
-            $statement = quiz_database()->prepare(
+            $database = quiz_database();
+            $statement = $database->prepare(
                 'INSERT INTO utilisateurs (pseudo, email, mot_de_passe_hash) VALUES (?, ?, ?)'
             );
             $statement->execute([$pseudo, $email, password_hash($password, PASSWORD_DEFAULT)]);
-            $_SESSION['registration_success'] = true;
-            quiz_redirect('connexion.php');
+            quiz_sign_in((int) $database->lastInsertId(), $pseudo);
         } catch (PDOException $exception) {
             if (($exception->errorInfo[1] ?? null) === 1062) {
                 $error = 'Ce pseudo ou cette adresse e-mail est déjà utilisé.';
@@ -43,4 +48,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-require __DIR__ . '/includes/auth-form.php';
+require __DIR__ . '/../src/auth-form.php';

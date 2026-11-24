@@ -11,15 +11,11 @@ $title = $registration ? 'Inscription' : 'Connexion';
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?= $title ?> · Quiz de culture générale</title>
-    <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="css/auth.css">
+    <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
     <main class="account-panel">
         <h1><?= $title ?></h1>
-        <?php if ($accountCreated ?? false): ?>
-            <p role="status">Compte créé. Vous pouvez vous connecter.</p>
-        <?php endif; ?>
         <?php if ($error !== ''): ?>
             <p role="alert"><?= quiz_escape($error) ?></p>
         <?php endif; ?>
@@ -36,6 +32,11 @@ $title = $registration ? 'Inscription' : 'Connexion';
             <label>Mot de passe
                 <input name="password" type="password" autocomplete="<?= $registration ? 'new-password' : 'current-password' ?>" <?= $registration ? 'minlength="8"' : '' ?> required>
             </label>
+            <?php if ($registration): ?>
+                <label>Confirmation du mot de passe
+                    <input name="password_confirmation" type="password" autocomplete="new-password" required>
+                </label>
+            <?php endif; ?>
             <button class="btn" type="submit"><?= $registration ? 'Créer mon compte' : 'Se connecter' ?></button>
         </form>
         <p>

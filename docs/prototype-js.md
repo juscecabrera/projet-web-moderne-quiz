@@ -4,7 +4,7 @@ Interface initiale en HTML, CSS et JavaScript (sans framework). Elle sert de bas
 
 ## Lancer l'application
 
-Double-cliquer sur `index.html` (ou l'ouvrir dans le navigateur). Aucun serveur, aucun outil à installer.
+Ouvrir `public/index.html` dans le navigateur. Les scripts décrits ci-dessous se trouvent dans `public/assets/js/`.
 
 Le code utilise des scripts classiques, sans `import`/`export`, qui partagent un objet global `window.Quiz`. L'ordre de chargement est défini dans `index.html` : un fichier ne peut utiliser que ce qui a été chargé avant lui.
 
