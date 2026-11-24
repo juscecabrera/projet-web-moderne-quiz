@@ -48,6 +48,10 @@ if (!$gameId) {
             <p>Score : <strong><?= quiz_escape(quiz_game_points($game['score_total'])) ?></strong></p>
             <p>Bonnes réponses : <?= (int) $game['nombre_bonnes_reponses'] ?> sur <?= (int) $game['total'] ?></p>
             <p>Erreurs : <?= (int) $game['total'] - (int) $game['nombre_bonnes_reponses'] ?></p>
+            <p>Taux de réussite : <?= quiz_success_rate((int) $game['nombre_bonnes_reponses'], (int) $game['total']) ?></p>
+            <?php if ($game['theme_id'] !== null): ?>
+                <p><a href="classement.php?theme_id=<?= (int) $game['theme_id'] ?>">Voir le classement de ce thème</a></p>
+            <?php endif; ?>
             <h2>Correction</h2>
             <ol>
                 <?php foreach ($answers as $answer): ?>
