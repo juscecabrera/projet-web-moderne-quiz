@@ -217,7 +217,7 @@ CREATE TABLE IF NOT EXISTS parties (
 
     date_fin DATETIME NULL,
 
-    score_total INT UNSIGNED NOT NULL DEFAULT 0,
+    score_total DECIMAL(8,2) UNSIGNED NOT NULL DEFAULT 0,
 
     nombre_bonnes_reponses INT UNSIGNED
         NOT NULL DEFAULT 0,
@@ -269,7 +269,7 @@ CREATE TABLE IF NOT EXISTS reponses_joueurs (
 
     est_correcte BOOLEAN NOT NULL DEFAULT FALSE,
 
-    points_obtenus INT UNSIGNED NOT NULL DEFAULT 0,
+    points_obtenus DECIMAL(8,2) UNSIGNED NOT NULL DEFAULT 0,
 
     date_reponse DATETIME NOT NULL
         DEFAULT CURRENT_TIMESTAMP,
