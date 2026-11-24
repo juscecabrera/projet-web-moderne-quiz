@@ -1,0 +1,133 @@
+:root {
+  color-scheme: dark;
+  --ink: #071c25;
+  --ivory: #fff2df;
+  --muted: #d4c7b7;
+  --amber: #ffb04a;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--ink);
+  color: var(--ivory);
+  font-family: Georgia, serif;
+}
+
+.auth-layout {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+}
+
+.auth-panel {
+  display: flex;
+  flex-direction: column;
+  padding: clamp(1.25rem, 4vw, 4rem);
+  background: radial-gradient(ellipse at 0 100%, #102e37, transparent 65%);
+}
+
+.auth-brand {
+  align-self: flex-start;
+  display: flex;
+  gap: 0.65rem;
+  align-items: center;
+  font: 900 1.55rem/1 system-ui, sans-serif;
+  letter-spacing: 0.035em;
+}
+
+.auth-brand span {
+  font-size: 2rem;
+  color: var(--amber);
+}
+
+.auth-content {
+  width: min(100%, 28rem);
+  margin: auto;
+  padding-block: clamp(2rem, 6vh, 5rem);
+}
+
+h1 {
+  margin: 0 0 1.4rem;
+  font: 900 clamp(2.5rem, 5.6vw, 5rem)/1 system-ui, sans-serif;
+  letter-spacing: -0.065em;
+}
+
+form, label, .auth-field { display: grid; }
+form { gap: 1rem; }
+label, .auth-field { gap: 0.38rem; }
+
+input, button { font: inherit; }
+
+input {
+  width: 100%;
+  min-height: 2.85rem;
+  padding: 0.65rem 0.85rem;
+  border: 1px solid #8f9187;
+  border-radius: 0.45rem;
+  background: #102a34;
+  color: var(--ivory);
+}
+
+button {
+  min-height: 3rem;
+  margin-top: 0.4rem;
+  padding: 0.65rem 1rem;
+  border: 0;
+  border-radius: 0.5rem;
+  background: var(--amber);
+  color: #1e170c;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+button:hover { background: #ffc474; }
+
+a {
+  color: var(--amber);
+  text-underline-offset: 0.2em;
+}
+
+:focus-visible {
+  outline: 2px solid var(--amber);
+  outline-offset: 3px;
+}
+
+small, .auth-content > p:not(.auth-error) { color: var(--muted); }
+
+.auth-error {
+  border-inline-start: 3px solid #ff9580;
+  background: #3b282b;
+  padding: 0.75rem;
+  color: #ffe1d9;
+}
+
+.auth-art {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: #17333d;
+}
+
+.auth-art img {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.auth-art::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, #071c2540, transparent 36%);
+}
+
+@media (max-width: 700px) {
+  .auth-layout { grid-template-columns: minmax(0, 1fr); }
+  .auth-art { grid-row: 1; height: clamp(7rem, 22vw, 12rem); }
+  .auth-content { padding-block: 1.6rem 0.5rem; }
+  input, button { font-size: 1rem; }
+}
