@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-require __DIR__ . '/includes/session.php';
+require __DIR__ . '/../src/session.php';
 quiz_require_post_token();
 
 $cookie = session_get_cookie_params();

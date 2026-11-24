@@ -71,12 +71,15 @@ Si la base existe déjà avec des scores entiers, importer `database/migration_s
 Avec PHP 8.2 et les extensions `pdo_mysql` et `mbstring`, lancer depuis la racine du dépôt :
 
 ```sh
-php -S 127.0.0.1:8080 -t frontend
+php -S 127.0.0.1:8080 -t public
 ```
 
 Ouvrir [le quiz](http://127.0.0.1:8080/) et cliquer sur **Créer un compte**.
 La configuration locale par défaut utilise MySQL sur `127.0.0.1:3306` avec la base `quiz_culture_generale` et l’utilisateur `root` sans mot de passe.
 Définir `QUIZ_DB_HOST`, `QUIZ_DB_PORT`, `QUIZ_DB_NAME`, `QUIZ_DB_USER` et `QUIZ_DB_PASSWORD` si nécessaire.
+Définir `QUIZ_QUESTION_LIMIT` entre 1 et 10 pour modifier la longueur des nouvelles parties. La valeur par défaut est 10.
+
+Avec Apache dans WampServer et le projet dans `C:\wamp64\www\projet-web-moderne-quiz`, ouvrir [le point d’entrée PHP](http://localhost/projet-web-moderne-quiz/public/index.php). En hébergement, utiliser `public/` comme racine web.
 
 ## 5. Données disponibles
 
@@ -145,4 +148,4 @@ Le parcours PHP utilise la session pour identifier le joueur, charge les thèmes
 
 La partie propose jusqu’à dix questions du thème, réparties entre les difficultés disponibles. Les propositions sont affichées avant la correction. Le score est calculé à partir des multiplicateurs de difficulté enregistrés dans MySQL.
 
-Le prototype JavaScript reste accessible via `frontend/index.html`.
+Le prototype JavaScript reste accessible via `public/index.html`. Voir le [flux du quiz](docs/flux-quiz.md) et les [contrôles de livraison](tests/recette.md).

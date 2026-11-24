@@ -1,8 +1,8 @@
 <?php
 declare(strict_types=1);
 
-require __DIR__ . '/includes/session.php';
-require __DIR__ . '/includes/database.php';
+require __DIR__ . '/../src/session.php';
+require __DIR__ . '/../src/database.php';
 
 if (isset($_SESSION['user_id'])) {
     quiz_redirect('accueil.php');
@@ -10,14 +10,14 @@ if (isset($_SESSION['user_id'])) {
 
 $error = $email = '';
 $registration = false;
-$accountCreated = isset($_SESSION['registration_success']);
-unset($_SESSION['registration_success']);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     quiz_require_post_token();
     $email = trim(quiz_input('email'));
     $password = quiz_input('password');
-    $error = 'Adresse e-mail ou mot de passe incorrect.';
+    $error = $email === '' || $password === ''
+        ? 'Remplissez tous les champs.'
+        : 'Adresse e-mail ou mot de passe incorrect.';
 
     if (strlen($email) <= 150 && filter_var($email, FILTER_VALIDATE_EMAIL) &&
         $password !== '' && strlen($password) <= 72 && !str_contains($password, "\0")) {
@@ -29,9 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $user = $statement->fetch(PDO::FETCH_ASSOC);
 
             if ($user && password_verify($password, $user['mot_de_passe_hash'])) {
-                session_regenerate_id(true);
-                $_SESSION = ['user_id' => (int) $user['id_utilisateur'], 'pseudo' => $user['pseudo']];
-                quiz_redirect('accueil.php');
+                quiz_sign_in((int) $user['id_utilisateur'], $user['pseudo']);
             }
         } catch (PDOException $exception) {
             error_log($exception->getMessage());
@@ -41,4 +39,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-require __DIR__ . '/includes/auth-form.php';
+require __DIR__ . '/../src/auth-form.php';

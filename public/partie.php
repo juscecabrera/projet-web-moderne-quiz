@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-require __DIR__ . '/includes/session.php';
-require __DIR__ . '/includes/database.php';
-require __DIR__ . '/includes/game.php';
+require __DIR__ . '/../src/session.php';
+require __DIR__ . '/../src/database.php';
+require __DIR__ . '/../src/game.php';
 $userId = quiz_require_user();
 $isPost = $_SERVER['REQUEST_METHOD'] === 'POST';
 if ($isPost) {
@@ -31,11 +31,18 @@ if (!$themeId) {
         if ($game && $game['theme_id'] !== $themeId) {
             $game = null;
         }
+        $action = $isPost ? quiz_input('action') : '';
+        if ($game && $action === 'start') {
+            if (count(quiz_game_answers($database, $game['id'])) < count($game['questions'])) {
+                quiz_redirect($url);
+            }
+            $game = null;
+        }
 
         if (!$theme) {
             http_response_code(404);
             $error = 'Ce thème est introuvable.';
-        } elseif ($isPost && quiz_input('action') === 'start' && !$game) {
+        } elseif ($action === 'start' && !$game) {
             $questions = quiz_game_questions($database, $themeId);
             if ($questions) {
                 quiz_game_start($database, $userId, $themeId, $questions);
@@ -56,13 +63,12 @@ if (!$themeId) {
             $total = count($game['questions']);
             $answers = quiz_game_answers($database, $gameId);
             $index = count($answers);
-            if ($index === $total) {
-                unset($_SESSION['quiz_game']);
-                quiz_redirect('bilan.php?partie_id=' . $gameId);
-            }
-            $questionId = $game['questions'][$index];
+            $lastQuestion = $index > 0 ? (int) $answers[$index - 1] : null;
+            $correctionUrl = $url . '&correction=' . $lastQuestion;
+            $requestedCorrection = filter_input(INPUT_GET, 'correction', FILTER_VALIDATE_INT);
+            $questionId = $game['questions'][$index] ?? null;
 
-            if ($isPost && quiz_input('action') === 'answer') {
+            if ($action === 'answer') {
                 $postedGame = filter_input(INPUT_POST, 'partie_id', FILTER_VALIDATE_INT);
                 $postedQuestion = filter_input(INPUT_POST, 'question_id', FILTER_VALIDATE_INT);
                 $answerId = filter_input(INPUT_POST, 'reponse_id', FILTER_VALIDATE_INT);
@@ -70,34 +76,38 @@ if (!$themeId) {
                     http_response_code(409);
                     $error = 'Cette partie n’est plus active.';
                 } elseif ($postedQuestion !== $questionId) {
-                    quiz_redirect($url);
+                    quiz_redirect($lastQuestion === null ? $url : $correctionUrl);
                 } elseif ($answerId && quiz_game_submit(
                     $database, $gameId, $userId, $questionId, $answerId, $index + 1 === $total
                 )) {
-                    quiz_redirect($url);
+                    quiz_redirect($url . '&correction=' . $questionId);
                 } else {
                     http_response_code(422);
                     $error = 'Choisissez une réponse proposée pour cette question.';
                 }
             }
 
-            $statement = $database->prepare(
-                'SELECT enonce FROM questions WHERE id_question = ?'
-            );
-            $statement->execute([$questionId]);
-            $question = $statement->fetchColumn();
-            $statement = $database->prepare(
-                'SELECT id_reponse, texte_reponse FROM reponses WHERE id_question = ? ORDER BY id_reponse'
-            );
-            $statement->execute([$questionId]);
-            $reponses = $statement->fetchAll(PDO::FETCH_ASSOC);
-            if (!$question || !$reponses) {
-                http_response_code(409);
-                $question = null;
-                $error = 'Cette question n’est plus disponible.';
-            }
-            if ($index > 0) {
-                $correction = quiz_game_details($database, $gameId, (int) $answers[$index - 1])[0] ?? null;
+            if ($lastQuestion !== null && $requestedCorrection === $lastQuestion) {
+                $correction = quiz_game_details($database, $gameId, $lastQuestion)[0] ?? null;
+            } elseif ($questionId === null) {
+                quiz_redirect($correctionUrl);
+            } else {
+                $statement = $database->prepare(
+                    'SELECT q.enonce, d.libelle FROM questions q
+                     JOIN difficultes d ON d.id_difficulte = q.id_difficulte WHERE q.id_question = ?'
+                );
+                $statement->execute([$questionId]);
+                $question = $statement->fetch(PDO::FETCH_ASSOC);
+                $statement = $database->prepare(
+                    'SELECT id_reponse, texte_reponse FROM reponses WHERE id_question = ? ORDER BY id_reponse'
+                );
+                $statement->execute([$questionId]);
+                $reponses = $statement->fetchAll(PDO::FETCH_ASSOC);
+                if (!$question || count($reponses) !== 4) {
+                    http_response_code(409);
+                    $question = null;
+                    $error = 'Cette question n’est plus disponible.';
+                }
             }
         }
     } catch (PDOException $exception) {
@@ -114,8 +124,7 @@ if (!$themeId) {
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Partie · Quiz de culture générale</title>
-    <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="css/auth.css">
+    <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
     <main class="account-panel theme-panel">
@@ -123,28 +132,39 @@ if (!$themeId) {
         <?php if ($error !== ''): ?>
             <p role="alert"><?= quiz_escape($error) ?></p>
         <?php endif; ?>
-        <?php if ($question): ?>
-            <?php if ($correction): ?>
-                <section aria-label="Correction de la question précédente">
-                    <h2><?= $correction['est_correcte'] ? 'Bonne réponse' : 'Réponse incorrecte' ?></h2>
+        <?php if ($correction): ?>
+                <section aria-label="Correction">
+                    <p>Question <?= $index ?> sur <?= $total ?></p>
+                    <h2><?= quiz_escape($correction['enonce']) ?></h2>
+                    <p role="status"><?= $correction['est_correcte'] ? 'Bonne réponse' : 'Réponse incorrecte' ?></p>
+                    <p>Votre choix : <?= quiz_escape($correction['choix'] ?? '') ?></p>
                     <p>Réponse attendue : <?= quiz_escape($correction['bonne_reponse'] ?? '') ?></p>
+                    <p>Points gagnés : <?= quiz_escape(quiz_game_points($correction['points_obtenus'])) ?></p>
                     <?php if ($correction['explication']): ?>
                         <p><?= quiz_escape($correction['explication']) ?></p>
                     <?php endif; ?>
                 </section>
-            <?php endif; ?>
+                <?php if ($index < $total): ?>
+                    <a class="btn btn-primary" href="<?= quiz_escape($url) ?>">Question suivante</a>
+                <?php else: ?>
+                    <a class="btn btn-primary" href="bilan.php?partie_id=<?= $gameId ?>">Voir mon bilan</a>
+                <?php endif; ?>
+        <?php elseif ($question): ?>
             <p>Question <?= $index + 1 ?> sur <?= $total ?></p>
-            <h2 id="question"><?= quiz_escape($question) ?></h2>
-            <form method="post" aria-labelledby="question">
+            <p>Difficulté : <?= quiz_escape($question['libelle']) ?></p>
+            <h2 id="question"><?= quiz_escape($question['enonce']) ?></h2>
+            <form method="post" aria-labelledby="question" data-answer-form>
                 <input type="hidden" name="csrf_token" value="<?= quiz_csrf_token() ?>">
                 <input type="hidden" name="action" value="answer">
                 <input type="hidden" name="partie_id" value="<?= $gameId ?>">
                 <input type="hidden" name="question_id" value="<?= $questionId ?>">
                 <?php foreach ($reponses as $reponse): ?>
-                    <button class="category" type="submit" name="reponse_id" value="<?= (int) $reponse['id_reponse'] ?>">
+                    <label class="answer-option">
+                        <input type="radio" name="reponse_id" value="<?= (int) $reponse['id_reponse'] ?>" required>
                         <?= quiz_escape($reponse['texte_reponse']) ?>
-                    </button>
+                    </label>
                 <?php endforeach; ?>
+                <button class="btn btn-primary" type="submit">Valider</button>
             </form>
         <?php elseif ($error === ''): ?>
             <form method="post">
@@ -153,7 +173,8 @@ if (!$themeId) {
                 <button class="btn btn-primary" type="submit">Lancer le quiz</button>
             </form>
         <?php endif; ?>
-        <p><a href="accueil.php">Retour aux thèmes</a></p>
+        <p><a href="themes.php">Retour aux thèmes</a></p>
     </main>
+    <script src="assets/js/answer-form.js" defer></script>
 </body>
 </html>
