@@ -22,6 +22,9 @@ body {
 }
 
 .auth-panel {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   padding: clamp(1.25rem, 4vw, 4rem);
@@ -35,18 +38,53 @@ body {
   align-items: center;
   font: 900 1.55rem/1 system-ui, sans-serif;
   letter-spacing: 0.035em;
+  padding-bottom: 0.65rem;
+  border-bottom: 1px solid #fff2df80;
 }
 
 .auth-brand span {
-  font-size: 2rem;
-  color: var(--amber);
+  width: 2rem;
+  height: 2rem;
+  flex: none;
+  background: var(--amber);
+  clip-path: polygon(51% 0, 56% 37%, 86% 12%, 65% 43%, 100% 53%, 62% 57%, 81% 91%, 54% 68%, 44% 100%, 43% 63%, 9% 83%, 34% 54%, 0 42%, 39% 44%, 21% 11%, 47% 37%);
+  font-size: 0;
 }
 
 .auth-content {
+  position: relative;
+  z-index: 1;
   width: min(100%, 28rem);
   margin: auto;
   padding-block: clamp(2rem, 6vh, 5rem);
 }
+
+.auth-contours {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: min(55%, 22rem);
+  height: 8rem;
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+.auth-contours span {
+  --step: 0;
+  position: absolute;
+  bottom: calc(-5.5rem - var(--step) * 0.45rem);
+  left: calc(-2rem + var(--step) * 0.66rem);
+  width: calc(100% - var(--step) * 1.6rem);
+  height: calc(12rem - var(--step) * 0.6rem);
+  border: 1px solid #ed903f;
+  border-radius: 38% 62% 49% 51% / 45% 51% 49% 55%;
+  rotate: 16deg;
+}
+
+.auth-contours span:nth-child(2) { --step: 1; }
+.auth-contours span:nth-child(3) { --step: 2; }
+.auth-contours span:nth-child(4) { --step: 3; }
+.auth-contours span:nth-child(5) { --step: 4; }
 
 h1 {
   margin: 0 0 1.4rem;
@@ -130,4 +168,5 @@ small, .auth-content > p:not(.auth-error) { color: var(--muted); }
   .auth-art { grid-row: 1; height: clamp(7rem, 22vw, 12rem); }
   .auth-content { padding-block: 1.6rem 0.5rem; }
   input, button { font-size: 1rem; }
+  .auth-contours { display: none; }
 }

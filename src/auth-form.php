@@ -54,6 +54,9 @@ $illustration = $registration ? 'inscription' : 'connexion';
                     <?php endif; ?>
                 </p>
             </div>
+            <div class="auth-contours" aria-hidden="true">
+                <span></span><span></span><span></span><span></span><span></span>
+            </div>
         </div>
         <div class="auth-art" aria-hidden="true">
             <img src="assets/images/<?= $illustration ?>.webp" alt="" fetchpriority="high">
