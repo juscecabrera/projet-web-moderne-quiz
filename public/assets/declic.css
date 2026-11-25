@@ -372,7 +372,7 @@ label.game-answer { cursor: pointer; }
 .ranking-table :is(td, th) { padding: .65rem .7rem; border-bottom: 1px solid var(--rule); }
 .ranking-table th[scope="row"] { overflow-wrap: anywhere; }
 .ranking-table :is(td, th):last-child { text-align: right; }
-.ranking-table .declic-initial { display: inline-grid; margin-inline-end: .55rem; vertical-align: middle; }
+.ranking-table :is(.declic-initial, .declic-avatar) { display: inline-grid; margin-inline-end: .55rem; vertical-align: middle; }
 .ranking-leader { background: #ffb04a20; }
 .ranking-leader td:first-child { color: var(--amber); font-weight: 700; }
 .ranking-note { color: var(--muted); }

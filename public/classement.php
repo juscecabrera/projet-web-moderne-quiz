@@ -13,6 +13,7 @@ $ownRank = null;
 
 $themeId = filter_input(INPUT_GET, 'theme_id', FILTER_VALIDATE_INT);
 $themes = $ranking = [];
+$photos = [];
 $error = '';
 try {
     $database = quiz_database();
@@ -26,6 +27,7 @@ try {
         $error = 'Choisissez un thème proposé.';
     } elseif ($themeId !== null) {
         $ranking = quiz_ranking($database, $themeId);
+        $photos = quiz_users_with_photos($database, array_column($ranking, 'id_utilisateur'));
         foreach ($ranking as $entry) {
             if ((int) $entry['id_utilisateur'] === $userId) {
                 $ownRank = $entry;
@@ -82,7 +84,11 @@ try {
                                 <tr class="<?= (int) $entry['rang'] === 1 ? 'ranking-leader' : '' ?>">
                                     <td><?= (int) $entry['rang'] ?></td>
                                     <th scope="row">
-                                        <span class="declic-initial" aria-hidden="true"><?= quiz_escape(quiz_avatar_initial($entry['pseudo'])) ?></span>
+                                        <?php if (isset($photos[$entry['id_utilisateur']])): ?>
+                                            <img class="declic-avatar" src="photo-compte.php?joueur=<?= (int) $entry['id_utilisateur'] ?>" alt="" loading="lazy">
+                                        <?php else: ?>
+                                            <span class="declic-initial" aria-hidden="true"><?= quiz_escape(quiz_avatar_initial($entry['pseudo'])) ?></span>
+                                        <?php endif; ?>
                                         <?= quiz_escape($entry['pseudo']) ?>
                                     </th>
                                     <td><?= quiz_escape(quiz_game_points($entry['points'])) ?></td>

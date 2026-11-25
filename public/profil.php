@@ -168,6 +168,7 @@ $token = quiz_csrf_token();
                                 <label>Photo de profil (JPEG, PNG ou WebP, 3 Mo max.)
                                     <input type="file" name="avatar" accept="image/jpeg,image/png,image/webp" required>
                                 </label>
+                                <small>Les autres joueurs pourront voir ta photo dans le classement.</small>
                                 <button name="action" value="photo">Enregistrer la photo</button>
                             </form>
                             <?php if ($hasPhoto): ?>

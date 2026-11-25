@@ -21,6 +21,24 @@ function quiz_avatar_initial(string $pseudo): string
     return mb_strtoupper(mb_substr($pseudo, 0, 1, 'UTF-8'), 'UTF-8');
 }
 
+function quiz_users_with_photos(PDO $database, array $userIds): array
+{
+    if ($userIds === []) {
+        return [];
+    }
+    $placeholders = implode(', ', array_fill(0, count($userIds), '?'));
+    try {
+        $statement = $database->prepare("SELECT id_utilisateur FROM photos_profils WHERE id_utilisateur IN ($placeholders)");
+        $statement->execute($userIds);
+        return array_fill_keys($statement->fetchAll(PDO::FETCH_COLUMN), true);
+    } catch (PDOException $exception) {
+        if (($exception->errorInfo[1] ?? null) === 1146) {
+            return [];
+        }
+        throw $exception;
+    }
+}
+
 function quiz_uploaded_avatar(mixed $file): string
 {
     if (!function_exists('imagewebp')) {
