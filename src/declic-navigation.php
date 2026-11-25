@@ -16,12 +16,12 @@ $links = [
             </a>
         <?php endforeach; ?>
     </nav>
-    <a class="declic-user" href="profil.php">
+    <div class="declic-user">
         <?php if ($hasPhoto): ?>
             <img class="declic-avatar" src="photo-compte.php" alt="">
         <?php else: ?>
             <span class="declic-initial" aria-hidden="true"><?= quiz_escape(quiz_avatar_initial($pseudo)) ?></span>
         <?php endif; ?>
         <span><?= quiz_escape($pseudo) ?></span>
-    </a>
+    </div>
 </aside>
