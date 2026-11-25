@@ -5,12 +5,16 @@ const QUIZ_PLAYABLE_QUESTION = "q.statut_validation = 'validee'
     AND EXISTS (SELECT 1 FROM reponses r WHERE r.id_question = q.id_question
                 GROUP BY r.id_question HAVING COUNT(*) = 4 AND SUM(r.est_correcte = 1) = 1)";
 const QUIZ_LEVELS = [1 => 'Facile', 2 => 'Moyen', 3 => 'Difficile'];
+const QUIZ_THEME_ART = [
+    'Géographie' => 'geographie', 'Histoire' => 'histoire', 'Sciences' => 'sciences',
+    'Sport' => 'sport', 'Culture générale' => 'culture', 'Arts et divertissement' => 'arts',
+];
 
 function quiz_themes(PDO $database): array
 {
     return $database->query(
         "SELECT id_categorie, nom_categorie, description FROM categories
-         WHERE nom_categorie IN ('Géographie', 'Sciences') ORDER BY nom_categorie"
+         ORDER BY id_categorie"
     )->fetchAll(PDO::FETCH_ASSOC);
 }
 
@@ -28,15 +32,19 @@ function quiz_game_theme(PDO $database, int $themeId): array|false
     return $statement->fetch(PDO::FETCH_ASSOC);
 }
 
-function quiz_game_questions(PDO $database, int $themeId, int $level): array
+function quiz_game_questions(PDO $database, int $userId, int $themeId, int $level): array
 {
     $statement = $database->prepare(
         'SELECT q.id_question FROM questions q
          WHERE q.id_categorie = :theme AND q.id_difficulte = :niveau AND ' . QUIZ_PLAYABLE_QUESTION . '
-         ORDER BY RAND() LIMIT :limite'
+         ORDER BY EXISTS (
+             SELECT 1 FROM reponses_joueurs r JOIN parties p ON p.id_partie = r.id_partie
+             WHERE r.id_question = q.id_question AND p.id_utilisateur = :joueur
+         ), RAND() LIMIT :limite'
     );
     $statement->bindValue('theme', $themeId, PDO::PARAM_INT);
     $statement->bindValue('niveau', $level, PDO::PARAM_INT);
+    $statement->bindValue('joueur', $userId, PDO::PARAM_INT);
     $statement->bindValue('limite', quiz_game_limit(), PDO::PARAM_INT);
     $statement->execute();
     return array_map('intval', $statement->fetchAll(PDO::FETCH_COLUMN));
@@ -135,7 +143,8 @@ function quiz_game_submit(
 
 function quiz_game_details(PDO $database, int $gameId, ?int $questionId = null): array
 {
-    $sql = 'SELECT q.enonce, q.explication, choisie.texte_reponse AS choix,
+    $sql = 'SELECT q.enonce, q.explication, q.id_difficulte, r.id_reponse AS choix_id,
+                   correcte.id_reponse AS bonne_reponse_id, choisie.texte_reponse AS choix,
                    correcte.texte_reponse AS bonne_reponse, r.est_correcte, r.points_obtenus
             FROM reponses_joueurs r
             JOIN questions q ON q.id_question = r.id_question
@@ -160,7 +169,8 @@ function quiz_game_points(string $value): string
 function quiz_game_results(PDO $database, int $userId, ?int $gameId = null): array
 {
     $sql = "SELECT p.id_partie, p.score_total, p.nombre_bonnes_reponses, p.date_fin,
-                   COUNT(r.id_question) AS total, MIN(c.id_categorie) AS theme_id, MIN(c.nom_categorie) AS theme
+                   COUNT(r.id_question) AS total, MIN(c.id_categorie) AS theme_id, MIN(c.nom_categorie) AS theme,
+                   IF(MIN(q.id_difficulte) = MAX(q.id_difficulte), MIN(q.id_difficulte), NULL) AS niveau
             FROM parties p
             LEFT JOIN reponses_joueurs r ON r.id_partie = p.id_partie
             LEFT JOIN questions q ON q.id_question = r.id_question
@@ -184,22 +194,18 @@ function quiz_success_rate(int $correct, int $total): string
 function quiz_ranking(PDO $database, int $themeId): array
 {
     $statement = $database->prepare(
-        "WITH eligibles AS (
-             SELECT p.id_utilisateur, p.nombre_bonnes_reponses
+        "WITH cumuls AS (
+             SELECT p.id_utilisateur, SUM(r.points_obtenus) AS points
              FROM parties p
              JOIN reponses_joueurs r ON r.id_partie = p.id_partie
              JOIN questions q ON q.id_question = r.id_question
-             WHERE p.statut = 'terminee' AND p.id_utilisateur IS NOT NULL
-             GROUP BY p.id_partie
-             HAVING COUNT(*) = 10 AND MIN(q.id_categorie) = ? AND MAX(q.id_categorie) = ?
-         ), meilleurs AS (
-             SELECT id_utilisateur, MAX(nombre_bonnes_reponses) AS bonnes_reponses
-             FROM eligibles GROUP BY id_utilisateur
+             WHERE p.statut = 'terminee' AND q.id_categorie = ? AND p.id_utilisateur IS NOT NULL
+             GROUP BY p.id_utilisateur
          )
-         SELECT RANK() OVER (ORDER BY m.bonnes_reponses DESC) AS rang, u.pseudo, m.bonnes_reponses
-         FROM meilleurs m JOIN utilisateurs u ON u.id_utilisateur = m.id_utilisateur
+         SELECT RANK() OVER (ORDER BY m.points DESC) AS rang, u.pseudo, m.points
+         FROM cumuls m JOIN utilisateurs u ON u.id_utilisateur = m.id_utilisateur
          ORDER BY rang, u.pseudo, u.id_utilisateur"
     );
-    $statement->execute([$themeId, $themeId]);
+    $statement->execute([$themeId]);
     return $statement->fetchAll(PDO::FETCH_ASSOC);
 }

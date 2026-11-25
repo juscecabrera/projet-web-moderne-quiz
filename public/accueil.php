@@ -43,7 +43,7 @@ $activePage = 'accueil.php';
                     <img src="assets/images/accueil-classement.webp" alt="">
                     <div>
                         <h2>Classement</h2>
-                        <p>Compare tes résultats par thème.</p>
+                        <p>Compare tes points cumulés par thème.</p>
                         <span class="home-arrow" aria-hidden="true">→</span>
                     </div>
                 </a>
@@ -73,8 +73,8 @@ $activePage = 'accueil.php';
                     </div>
                     <div>
                         <span aria-hidden="true">↗</span>
-                        <h3>Gagne des points</h3>
-                        <p>Chaque bonne réponse améliore ton score. Retrouve tes points dans le bilan.</p>
+                        <h3>Cumule tes points</h3>
+                        <p>Chaque partie terminée compte dans le classement de son thème.</p>
                     </div>
                 </div>
             </section>

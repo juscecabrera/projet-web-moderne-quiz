@@ -287,7 +287,7 @@
   list-style: none;
 }
 
-.theme-levels li {
+.theme-levels label {
   padding: 0.3rem 0.75rem;
   border: 1px solid #ffb04a99;
   border-radius: 2rem;
@@ -295,14 +295,70 @@
   color: var(--ivory);
 }
 
-.theme-card:is(:hover, :focus-visible) {
+.theme-levels label:has(input:checked) { color: #23170c; background: var(--amber); }
+.theme-levels label:has(input:disabled) { opacity: 0.45; cursor: not-allowed; }
+.theme-levels label:has(input:focus-visible) { outline: 2px solid var(--amber); outline-offset: 3px; }
+.theme-levels button { flex-basis: 100%; margin: 0.25rem min(10%, 2rem) 0; }
+
+.theme-card:is(:hover, :focus-within) {
   border-color: var(--amber);
   box-shadow: inset 0 0 0 1px var(--amber);
 }
 
 .theme-card:focus-visible { outline: 2px solid var(--amber); outline-offset: 3px; }
-.theme-card:is(:hover, :focus-visible)::before { background-color: #071c2575; }
-.theme-card:is(:hover, :focus-visible) .theme-levels { display: flex; }
+.theme-card:is(:hover, :focus-within)::before { background-color: #071c2575; }
+.theme-card:is(:hover, :focus-within) .theme-levels { display: flex; }
+
+.game-page { min-width: 0; }
+.game-banner {
+  display: grid; align-content: end; position: relative; isolation: isolate;
+  min-height: clamp(10rem, 18vw, 16rem); padding: 1.5rem clamp(1rem, 4vw, 4rem);
+  border-bottom: 1px solid var(--rule); overflow: hidden;
+}
+.game-banner img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; }
+.game-banner::before { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(90deg, #071c25f5, #071c2570 75%), linear-gradient(0deg, #071c25a0, transparent); }
+.game-banner h1 { margin: 0; font: 900 clamp(2.5rem, 6vw, 6rem)/1 var(--display); letter-spacing: -0.055em; }
+.game-banner p { width: fit-content; margin: .75rem 0 0; padding: .2rem .8rem; border-radius: 2rem; border: 1px solid var(--amber); color: var(--ivory); background: #071c25c9; }
+.game-content { width: min(100%, 76rem); margin: auto; padding: clamp(1rem, 3vw, 2.7rem); }
+.game-content h2 { margin: 1.65rem 0 1.25rem; text-align: center; font-size: clamp(1.4rem, 3.7vw, 3rem); line-height: 1.14; overflow-wrap: anywhere; }
+.game-progress-label { margin: 0; text-align: center; font-weight: 700; font-size: 1.15rem; }
+.game-progress { display: block; width: min(100%, 42rem); height: .65rem; margin: .65rem auto 0; accent-color: var(--amber); }
+.game-answers { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .85rem; padding: 0; list-style: none; }
+.game-answer {
+  display: flex; align-items: center; gap: .8rem; min-height: 4rem; padding: .85rem 1rem;
+  border: 1px solid var(--rule); border-radius: .65rem; background: #0a222c;
+  font-size: clamp(1rem, 2.35vw, 1.45rem); overflow-wrap: anywhere;
+}
+label.game-answer { cursor: pointer; }
+.game-answer input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.game-answer > span { color: var(--amber); border-inline-end: 1px solid var(--rule); padding-inline-end: .75rem; font-weight: 700; }
+.game-answer small { display: block; }
+.game-answer:has(input:checked), .game-answer:hover { border-color: var(--amber); }
+.game-answer:has(input:focus-visible), .game-primary:focus-visible { outline: 2px solid var(--amber); outline-offset: 3px; }
+.game-primary, .game-secondary {
+  display: inline-block; padding: .62rem 1.1rem; border: 1px solid var(--amber); border-radius: .5rem;
+  background: var(--amber); color: #23170c; font: inherit; font-weight: 700; text-decoration: none; cursor: pointer;
+}
+.declic-layout a.game-primary { color: #23170c; }
+.game-secondary { background: transparent; color: var(--ivory); }
+.game-primary:disabled { opacity: .55; cursor: not-allowed; }
+[data-answer-form] > .game-primary { display: block; min-width: 12rem; margin: 1.25rem auto 0; }
+.game-feedback { display: flex; flex-wrap: wrap; align-items: center; gap: .8rem 1.2rem; margin-top: 1.15rem; padding: .85rem; border: 1px solid; border-radius: .75rem; }
+.game-feedback p { margin: 0; }
+.game-feedback a { margin-inline-start: auto; }
+.game-correct { border-color: #a4de9e; background: #183b2d; color: #e1ffd9; }
+.game-wrong { border-color: #ff9c8b; background: #43292d; color: #ffe1d9; }
+.game-earned { font-weight: 700; }
+.game-abandon { margin-top: 1.2rem; text-align: center; }
+.game-abandon button { background: none; border: 0; color: var(--muted); font: inherit; text-decoration: underline; cursor: pointer; }
+.game-summary { max-width: 61rem; text-align: center; }
+.game-score, .game-stats p { border: 1px solid var(--rule); border-radius: .8rem; padding: 1rem; background: #0a222c; }
+.game-score strong { color: var(--amber); font: 900 clamp(3.3rem, 9vw, 8rem)/1 var(--display); letter-spacing: -.05em; }
+.game-score p { margin: .6rem 0 0; font-size: 1.15rem; }
+.game-stats, .game-summary-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .75rem; }
+.game-stats strong { color: var(--amber); }
+.game-review { margin-top: 1.3rem; text-align: left; }
+.game-review summary { cursor: pointer; }
 
 @media (hover: none) {
   .theme-levels { display: flex; }
@@ -327,6 +383,7 @@
 
 @media (max-width: 540px) {
   .themes-grid { grid-template-columns: minmax(0, 1fr); }
+  .game-answers, .game-summary-actions { grid-template-columns: minmax(0, 1fr); }
   .home-shortcuts, .home-features { grid-template-columns: minmax(0, 1fr); }
   .home-features { gap: 1rem; }
   .home-features > div { padding: 0 0 1rem; }

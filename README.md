@@ -70,7 +70,7 @@ Si la base a été créée avant l’ajout des photos de profil, importer `datab
 
 **Attention :** importer les données de test une seule fois, dans une base vide, afin d'éviter les doublons.
 
-Importer ensuite `database/questions_niveaux.sql`. Ce script est réimportable et s’applique aussi aux bases déjà remplies. Il ajoute 32 questions pour proposer au moins dix questions en Facile, Moyen et Difficile dans chacun des deux thèmes jouables.
+Importer ensuite `database/questions_niveaux.sql`. Ce script est réimportable et s’applique aussi aux bases déjà remplies. Il complète Géographie et Sciences jusqu’à 200 questions jouables chacun et ajoute le thème Arts et divertissement. Histoire, Sport, Culture générale et Arts et divertissement disposent d’un stock plus court par niveau.
 
 ### Lancer le parcours PHP en local
 
@@ -147,12 +147,12 @@ SELECT 'Reponses', COUNT(*)
 FROM reponses;
 ```
 
-Le jeu de données initial contient 5 catégories, 5 difficultés, 96 questions et 384 réponses. Après l’import des questions complémentaires, il contient **128 questions et 512 réponses**.
+Le jeu de données initial contient 5 catégories, 5 difficultés, 96 questions et 384 réponses. Après l’import des questions complémentaires, il contient **6 catégories, 477 questions et 1 908 réponses**, en incluant les niveaux historiques.
 
 ## 8. Intégration avec l'application
 
 Le parcours PHP utilise la session pour identifier le joueur, charge les thèmes et les questions depuis MySQL, puis corrige et enregistre les réponses côté serveur. Le bilan charge la partie terminée et vérifie qu’elle appartient au compte connecté.
 
-La partie tire jusqu’à dix questions du thème et de la difficulté choisis. Les propositions sont affichées avant la correction. Le score en points utilise les multiplicateurs de difficulté de MySQL. Le classement compare le taux de réussite, indépendamment des points. Seules les parties terminées de dix questions comptent, avec le meilleur résultat par joueur et par thème. Deux taux égaux partagent le même rang.
+La partie tire jusqu’à dix questions du thème et de la difficulté choisis, en priorité parmi celles auxquelles le joueur n’a jamais répondu. Le score utilise les multiplicateurs de difficulté de MySQL. Le classement cumule les points de toutes les parties terminées dans le thème sélectionné, quelle que soit leur longueur. Deux totaux égaux partagent le même rang.
 
 Le prototype JavaScript reste accessible via `public/index.html`. Voir le [flux du quiz](docs/flux-quiz.md) et les [contrôles de livraison](tests/recette.md).

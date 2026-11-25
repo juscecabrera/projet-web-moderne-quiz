@@ -55,16 +55,16 @@ try {
         <?php if ($error !== ''): ?>
             <p role="alert"><?= quiz_escape($error) ?></p>
         <?php elseif (!$ranking): ?>
-            <p>Aucun joueur n’a terminé de quiz de 10 questions dans ce thème.</p>
+            <p>Aucun joueur n’a encore terminé de quiz dans ce thème.</p>
         <?php else: ?>
             <table class="quiz-table">
-                <thead><tr><th scope="col">Rang</th><th scope="col">Pseudo</th><th scope="col">Taux de réussite</th></tr></thead>
+                <thead><tr><th scope="col">Rang</th><th scope="col">Pseudo</th><th scope="col">Points cumulés</th></tr></thead>
                 <tbody>
                     <?php foreach ($ranking as $entry): ?>
                         <tr>
                             <td><?= (int) $entry['rang'] ?></td>
                             <td><?= quiz_escape($entry['pseudo']) ?></td>
-                            <td><?= quiz_success_rate((int) $entry['bonnes_reponses'], 10) ?></td>
+                            <td><?= quiz_escape(quiz_game_points($entry['points'])) ?></td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>

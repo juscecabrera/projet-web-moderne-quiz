@@ -10,9 +10,9 @@ $links = [
 <aside class="declic-rail">
     <a class="declic-brand" href="accueil.php"><span aria-hidden="true"></span>DÉCLIC</a>
     <nav aria-label="Navigation principale">
-        <?php foreach ($links as $url => [$icon, $label]): ?>
-            <a href="<?= $url ?>" <?= $url === $activePage ? 'aria-current="page"' : '' ?>>
-                <span class="declic-icon" aria-hidden="true"><?= $icon ?></span><?= $label ?>
+        <?php foreach ($links as $navUrl => [$icon, $navLabel]): ?>
+            <a href="<?= $navUrl ?>" <?= $navUrl === $activePage ? 'aria-current="page"' : '' ?>>
+                <span class="declic-icon" aria-hidden="true"><?= $icon ?></span><?= $navLabel ?>
             </a>
         <?php endforeach; ?>
     </nav>

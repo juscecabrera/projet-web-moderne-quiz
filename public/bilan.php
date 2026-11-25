@@ -4,7 +4,12 @@ declare(strict_types=1);
 require __DIR__ . '/../src/session.php';
 require __DIR__ . '/../src/database.php';
 require __DIR__ . '/../src/game.php';
+require __DIR__ . '/../src/account-photo.php';
 $userId = quiz_require_user();
+$pseudo = $_SESSION['pseudo'];
+$activePage = 'themes.php';
+$hasPhoto = false;
+$game = null;
 $gameId = filter_input(INPUT_GET, 'partie_id', FILTER_VALIDATE_INT, [
     'options' => ['min_range' => 1, 'max_range' => 4294967295],
 ]);
@@ -16,6 +21,7 @@ if (!$gameId) {
 } else {
     try {
         $database = quiz_database();
+        $hasPhoto = quiz_photo_for_user($database, $userId) !== null;
         $game = quiz_game_results($database, $userId, $gameId)[0] ?? null;
         if ($game) {
             $answers = quiz_game_details($database, $gameId);
@@ -29,47 +35,61 @@ if (!$gameId) {
         $error = 'Le bilan est temporairement indisponible.';
     }
 }
+$art = QUIZ_THEME_ART[$game['theme'] ?? ''] ?? null;
+$level = QUIZ_LEVELS[$game['niveau'] ?? 0] ?? null;
 ?>
 <!doctype html>
 <html lang="fr">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Bilan · Quiz de culture générale</title>
-    <link rel="stylesheet" href="assets/style.css">
+    <title>Bilan du quiz · Déclic</title>
+    <link rel="stylesheet" href="assets/declic.css">
 </head>
-<body>
-    <main class="account-panel theme-panel">
-        <h1>Bilan de la partie</h1>
-        <?php if ($error !== ''): ?>
-            <p role="alert"><?= quiz_escape($error) ?></p>
-        <?php else: ?>
-            <p>Thème : <?= quiz_escape($game['theme'] ?? 'Non renseigné') ?></p>
-            <p>Score : <strong><?= quiz_escape(quiz_game_points($game['score_total'])) ?></strong></p>
-            <p>Bonnes réponses : <?= (int) $game['nombre_bonnes_reponses'] ?> sur <?= (int) $game['total'] ?></p>
-            <p>Erreurs : <?= (int) $game['total'] - (int) $game['nombre_bonnes_reponses'] ?></p>
-            <p>Taux de réussite : <?= quiz_success_rate((int) $game['nombre_bonnes_reponses'], (int) $game['total']) ?></p>
-            <?php if ($game['theme_id'] !== null): ?>
-                <p><a href="classement.php?theme_id=<?= (int) $game['theme_id'] ?>">Voir le classement de ce thème</a></p>
+<body class="declic-layout">
+    <?php require __DIR__ . '/../src/declic-navigation.php'; ?>
+    <main id="contenu" class="game-page">
+        <header class="game-banner">
+            <img src="assets/images/<?= $art ? 'theme-' . $art : 'accueil-classement' ?>.webp" alt="">
+            <h1>Bilan du quiz</h1>
+            <?php if ($game): ?><p><?= quiz_escape($game['theme'] ?? 'Quiz') ?><?= $level ? ' · ' . $level : '' ?></p><?php endif; ?>
+        </header>
+        <div class="game-content game-summary">
+            <?php if ($error !== ''): ?>
+                <p class="account-message account-error" role="alert"><?= quiz_escape($error) ?></p>
+                <a class="game-primary" href="themes.php">Retour aux thèmes</a>
+            <?php else: ?>
+                <?php $correct = (int) $game['nombre_bonnes_reponses']; ?>
+                <div class="game-score">
+                    <strong>+<?= quiz_escape(quiz_game_points($game['score_total'])) ?> pts</strong>
+                    <p>Gagnés dans cette partie</p>
+                </div>
+                <div class="game-stats">
+                    <p><strong><?= $correct ?></strong> <?= $correct === 1 ? 'bonne réponse' : 'bonnes réponses' ?></p>
+                    <?php $errors = (int) $game['total'] - $correct; ?>
+                    <p><strong><?= $errors ?></strong> <?= $errors === 1 ? 'erreur' : 'erreurs' ?></p>
+                </div>
+                <div class="game-summary-actions">
+                    <a class="game-primary" href="themes.php">Rejouer</a>
+                    <?php if ($game['theme_id'] !== null): ?>
+                        <a class="game-secondary" href="classement.php?theme_id=<?= (int) $game['theme_id'] ?>">Voir le classement du thème</a>
+                    <?php endif; ?>
+                </div>
+                <details class="game-review">
+                    <summary>Revoir les réponses</summary>
+                    <ol>
+                        <?php foreach ($answers as $answer): ?>
+                            <li>
+                                <strong><?= quiz_escape($answer['enonce']) ?></strong>
+                                <p>Ta réponse : <?= quiz_escape($answer['choix'] ?? '') ?><br>
+                                    Bonne réponse : <?= quiz_escape($answer['bonne_reponse'] ?? '') ?></p>
+                                <?php if ($answer['explication']): ?><p><?= quiz_escape($answer['explication']) ?></p><?php endif; ?>
+                            </li>
+                        <?php endforeach; ?>
+                    </ol>
+                </details>
             <?php endif; ?>
-            <h2>Correction</h2>
-            <ol>
-                <?php foreach ($answers as $answer): ?>
-                    <li>
-                        <strong><?= quiz_escape($answer['enonce']) ?></strong>
-                        <p><?= $answer['est_correcte'] ? 'Bonne réponse' : 'Réponse incorrecte' ?>
-                            (<?= quiz_escape(quiz_game_points($answer['points_obtenus'])) ?>)</p>
-                        <p>Votre choix : <?= quiz_escape($answer['choix'] ?? '') ?><br>
-                            Réponse attendue : <?= quiz_escape($answer['bonne_reponse'] ?? '') ?></p>
-                        <?php if ($answer['explication']): ?>
-                            <p><?= quiz_escape($answer['explication']) ?></p>
-                        <?php endif; ?>
-                    </li>
-                <?php endforeach; ?>
-            </ol>
-        <?php endif; ?>
-        <p><a class="btn btn-primary" href="themes.php">Rejouer</a></p>
-        <p><a href="performances.php">Mes performances</a></p>
+        </div>
     </main>
 </body>
 </html>
