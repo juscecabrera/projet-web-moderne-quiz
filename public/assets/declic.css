@@ -360,7 +360,11 @@ label.game-answer { cursor: pointer; }
 .game-review { margin-top: 1.3rem; text-align: left; }
 .game-review summary { cursor: pointer; }
 
-.ranking-banner img { object-position: right 47%; }
+.ranking-banner img { object-fit: contain; object-position: right center; }
+.ranking-banner::before {
+  background: linear-gradient(90deg, var(--ink) 15%, #071c2599 55%, transparent 90%),
+              linear-gradient(0deg, #071c253b, transparent 40%);
+}
 .ranking-themes { display: flex; flex-wrap: wrap; gap: .55rem; }
 .ranking-themes a {
   border: 1px solid var(--rule); border-radius: 2rem; padding: .42rem .9rem; text-decoration: none;

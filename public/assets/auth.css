@@ -61,7 +61,7 @@ body {
 
 .auth-contours {
   position: absolute;
-  bottom: 0;
+  bottom: -1.25rem;
   left: 0;
   width: min(55%, 22rem);
   height: 8rem;
@@ -76,7 +76,7 @@ body {
   left: calc(-2rem + var(--step) * 0.66rem);
   width: calc(100% - var(--step) * 1.6rem);
   height: calc(12rem - var(--step) * 0.6rem);
-  border: 1px solid #ed903f;
+  border: 2px solid #ed903f;
   border-radius: 38% 62% 49% 51% / 45% 51% 49% 55%;
   rotate: 16deg;
 }

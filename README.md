@@ -1,158 +1,97 @@
-# projet-web-moderne-quiz
+# DÉCLIC
 
-## 1. Présentation
+DÉCLIC est un quiz de culture générale en français. Choisis un thème et une difficulté, réponds à dix questions et découvre la correction après chaque réponse. Le bilan récapitule les points gagnés. Le classement cumule les points des parties terminées, thème par thème.
 
-Ce dépôt contient le quiz de culture générale, ses pages PHP et les scripts SQL d’installation.
+Les six thèmes sont Géographie, Histoire, Sciences, Sport, Culture générale et Arts et divertissement. Les difficultés proposées sont Facile, Moyen et Difficile. Chaque joueur dispose d’un pseudo public unique et peut ajouter une photo depuis **Mon compte**.
 
-La base de données permet de gérer les utilisateurs, les catégories, les niveaux de difficulté, les questions, les propositions de réponses et les parties jouées.
+## Stack
 
-**Nom de la base de données :** `quiz_culture_generale`
+- **HTML, CSS et JavaScript** pour l’interface et ses interactions.
+- **PHP 8.2** et **PDO** pour les formulaires, les sessions et les requêtes SQL.
+- **MySQL 8** pour les comptes, les questions, les parties et les scores.
+- **WampServer et phpMyAdmin** pour l’installation locale sous Windows.
 
-**Système de gestion :** MySQL 8
+## Installation locale
 
-## 2. Organisation des fichiers
+### 1. Récupérer le projet
 
-| Fichier | Description |
-|---|---|
-| `schema.sql` | Création des tables et de leurs relations |
-| `donnees_test.sql` | Insertion des catégories, difficultés, questions et réponses |
-| `questions_niveaux.sql` | Ajout des questions de Géographie et de Sciences par difficulté |
-| `migration_scores_decimaux.sql` | Migration des scores pour une base déjà installée |
-| `migration_photos_profils.sql` | Ajout du stockage des photos sur une base existante |
+Sur une nouvelle installation, clonez le dépôt dans `C:\wamp64\www` et utilisez la branche d’intégration `develop` dès que la version DÉCLIC y est fusionnée.
 
-## 3. Structure de la base de données
+```powershell
+cd C:\wamp64\www
+git clone https://github.com/juscecabrera/projet-web-moderne-quiz.git
+cd projet-web-moderne-quiz
+git switch develop
+git pull --ff-only origin develop
+```
 
-La base contient 8 tables :
+Si le dépôt est déjà cloné, commencez par `git switch develop`, puis `git pull --ff-only origin develop`. Si Git signale des modifications locales, enregistrez-les sur votre branche de travail avant de changer de branche.
 
-| Table | Rôle |
-|---|---|
-| `utilisateurs` | Stockage des informations des joueurs |
-| `photos_profils` | Stockage des photos facultatives des joueurs |
-| `categories` | Organisation des questions par thème |
-| `difficultes` | Gestion des niveaux de difficulté et des multiplicateurs |
-| `questions` | Stockage des questions du quiz |
-| `reponses` | Stockage des propositions de réponses |
-| `parties` | Enregistrement des sessions de jeu |
-| `reponses_joueurs` | Enregistrement des réponses données pendant une partie |
+### 2. Préparer MySQL dans phpMyAdmin
 
-Les tables sont reliées par des clés étrangères afin d'assurer la cohérence des données.
+Démarrez WampServer, puis ouvrez phpMyAdmin. Sélectionnez **MySQL** si WampServer propose aussi MariaDB.
 
-## 4. Installation de la base de données
+**Nouvelle installation.** Dans l’onglet **Importer**, chargez les trois fichiers dans cet ordre :
 
-### Prérequis
+| Ordre | Fichier | Rôle |
+| --- | --- | --- |
+| 1 | [database/schema.sql](database/schema.sql) | Crée la base `quiz_culture_generale` et ses tables. |
+| 2 | [database/donnees_test.sql](database/donnees_test.sql) | Insère les catégories, difficultés, questions et réponses initiales. |
+| 3 | [database/questions_niveaux.sql](database/questions_niveaux.sql) | Ajoute les questions complémentaires et applique les corrections de Sport. |
 
-- MySQL 8
-- WAMP ou un environnement MySQL équivalent
-- phpMyAdmin ou un client SQL
+Après le premier import, sélectionnez `quiz_culture_generale` pour les suivants. Une base neuve complète contient **6 thèmes, 547 questions et 2 188 choix de réponse**. Le schéma actuel contient déjà les scores décimaux et la table des photos.
 
-### Étape 1 — Démarrer MySQL
+**Base existante.** Gardez la base et ses données. Appliquez les fichiers adaptés à son état :
 
-Démarrer WAMP et vérifier que le service MySQL fonctionne.
+- [migration_scores_decimaux.sql](database/migration_scores_decimaux.sql) si les colonnes de score de l’ancien schéma sont encore entières.
+- [migration_photos_profils.sql](database/migration_photos_profils.sql) si la table `photos_profils` est absente.
+- [questions_niveaux.sql](database/questions_niveaux.sql) pour ajouter le nouveau stock et appliquer les corrections. Il peut être réimporté sans dupliquer les questions ni les réponses existantes.
 
-### Étape 2 — Créer les tables
+Réservez `donnees_test.sql` à l’installation initiale. Il insère des identifiants fixes qui existent déjà sur une base peuplée.
 
-1. Ouvrir phpMyAdmin.
-2. Cliquer sur l'onglet **Importer**.
-3. Sélectionner le fichier `database/schema.sql`.
-4. Lancer l'importation.
+### 3. Ouvrir le quiz
 
-Le script crée la base `quiz_culture_generale` et ses huit tables.
+Avec Apache démarré et le dépôt dans `C:\wamp64\www\projet-web-moderne-quiz`, ouvrez [DÉCLIC sur localhost](http://localhost/projet-web-moderne-quiz/public/index.php) et cliquez sur **Créer un compte**.
 
-Si la base existe déjà avec des scores entiers, importer `database/migration_scores_decimaux.sql` pour conserver les demi-points.
-Si la base a été créée avant l’ajout des photos de profil, importer `database/migration_photos_profils.sql`.
+Vous pouvez aussi utiliser le serveur intégré de PHP. Depuis la racine du dépôt :
 
-### Étape 3 — Ajouter les données de test
-
-1. Sélectionner la base `quiz_culture_generale` dans phpMyAdmin.
-2. Cliquer sur **Importer**.
-3. Sélectionner le fichier `database/donnees_test.sql`.
-4. Lancer l'importation.
-
-**Attention :** importer les données de test une seule fois, dans une base vide, afin d'éviter les doublons.
-
-Importer ensuite `database/questions_niveaux.sql`. Ce script réimportable ajoute le thème Arts et divertissement, garantit au moins dix questions pour chaque combinaison thème et difficulté et corrige plusieurs énoncés de Sport sur les bases existantes.
-
-### Lancer le parcours PHP en local
-
-Avec PHP 8.2 et les extensions `pdo_mysql` et `mbstring`, lancer depuis la racine du dépôt :
-
-```sh
+```powershell
 php -S 127.0.0.1:8080 -t public
 ```
 
-Ouvrir [le quiz](http://127.0.0.1:8080/) et cliquer sur **Créer un compte**.
-La configuration locale par défaut utilise MySQL sur `127.0.0.1:3306` avec la base `quiz_culture_generale` et l’utilisateur `root` sans mot de passe.
-Définir `QUIZ_DB_HOST`, `QUIZ_DB_PORT`, `QUIZ_DB_NAME`, `QUIZ_DB_USER` et `QUIZ_DB_PASSWORD` si nécessaire.
-Pour les photos, activer l’extension PHP `gd` avec les formats JPEG, PNG et WebP. Configurer `upload_max_filesize` à au moins `3M` et `post_max_size` au-dessus de cette limite.
-Définir `QUIZ_QUESTION_LIMIT` entre 1 et 10 pour modifier la longueur des nouvelles parties. La valeur par défaut est 10.
+Ouvrez ensuite [DÉCLIC sur le port 8080](http://127.0.0.1:8080/). Le site PHP démarre par `public/index.php`. `public/index.html` reste le prototype JavaScript.
 
-Avec Apache dans WampServer et le projet dans `C:\wamp64\www\projet-web-moderne-quiz`, ouvrir [le point d’entrée PHP](http://localhost/projet-web-moderne-quiz/public/index.php). En hébergement, utiliser `public/` comme racine web.
+PHP a besoin de `pdo_mysql` et `mbstring`. Pour les photos, activez aussi `gd` avec JPEG, PNG et WebP. Configurez `upload_max_filesize` à au moins `3M` et `post_max_size` au-dessus de cette limite.
 
-## 5. Données disponibles
+Par défaut, l’appli utilise MySQL à l’adresse `127.0.0.1:3306`, la base `quiz_culture_generale` et l’utilisateur local `root` avec un mot de passe vide. Si votre configuration diffère, définissez `QUIZ_DB_HOST`, `QUIZ_DB_PORT`, `QUIZ_DB_NAME`, `QUIZ_DB_USER` et `QUIZ_DB_PASSWORD` dans l’environnement du serveur PHP. La variable `QUIZ_QUESTION_LIMIT` permet de régler la longueur d’une partie entre 1 et 10 pour les tests.
 
-Après l'importation, la base contient :
+## Contribuer
 
-| Données | Quantité |
-|---|---:|
-| Catégories | 5 |
-| Niveaux de difficulté | 5 |
-| Questions | 96 |
-| Propositions de réponses | 384 |
+`develop` reçoit les contributions de l’équipe. `main` sert aux versions validées pour la livraison. Pour proposer un changement, partez de `develop` à jour et créez votre propre branche.
 
-Les catégories disponibles sont : Géographie, Histoire, Sciences, Sport et Culture générale.
-
-Les niveaux de difficulté sont : Facile, Intermédiaire, Difficile, Expert et Master.
-
-## 6. Consulter les questions et leurs réponses
-
-Pour afficher les questions avec leurs propositions, exécuter cette requête dans phpMyAdmin :
-
-```sql
-SELECT
-    q.enonce AS question,
-    r.texte_reponse AS proposition,
-    r.est_correcte AS bonne_reponse
-FROM questions q
-JOIN reponses r
-    ON q.id_question = r.id_question
-ORDER BY q.id_question, r.id_reponse;
+```powershell
+git switch develop
+git pull --ff-only origin develop
+git switch -c feature/nom-du-changement
 ```
 
-La colonne `bonne_reponse` indique si la proposition est correcte :
+Testez vos modifications localement et faites un commit. Publiez **votre branche de travail** pour que GitHub puisse comparer les changements, puis ouvrez une **pull request vers `develop`**.
 
-- `1` : réponse correcte.
-- `0` : réponse incorrecte.
-
-## 7. Vérifier les données
-
-Exécuter cette requête pour vérifier le nombre d'enregistrements :
-
-```sql
-SELECT 'Categories' AS element, COUNT(*) AS total
-FROM categories
-
-UNION ALL
-
-SELECT 'Difficultes', COUNT(*)
-FROM difficultes
-
-UNION ALL
-
-SELECT 'Questions', COUNT(*)
-FROM questions
-
-UNION ALL
-
-SELECT 'Reponses', COUNT(*)
-FROM reponses;
+```powershell
+git push -u origin feature/nom-du-changement
 ```
 
-Le jeu de données initial contient 5 catégories, 5 difficultés, 96 questions et 384 réponses. Après l’import des questions complémentaires, il contient **6 catégories, 547 questions et 2 188 réponses**, en incluant les niveaux historiques.
+Dans la PR, décrivez les changements, les tests effectués et les éventuelles instructions SQL. Attendez la revue de l’équipe avant la fusion. Les changements destinés à `main` passent par une PR de livraison depuis `develop`.
 
-## 8. Intégration avec l'application
+## Organisation du dépôt
 
-Le parcours PHP utilise la session pour identifier le joueur, charge les thèmes et les questions depuis MySQL, puis corrige et enregistre les réponses côté serveur. Le bilan charge la partie terminée et vérifie qu’elle appartient au compte connecté.
+| Dossier | Contenu |
+| --- | --- |
+| `public/` | Pages du quiz et point d’entrée PHP |
+| `public/assets/` | Styles, scripts JavaScript et images |
+| `src/` | Sessions, connexion PDO, jeu et photos de compte |
+| `database/` | Schéma, données de départ et migrations |
+| `docs/` | [Flux de l’application](docs/flux-quiz.md) |
+| `tests/` | [Fiche de recette](tests/recette.md) |
 
-La partie tire jusqu’à dix questions du thème et de la difficulté choisis, en priorité parmi celles auxquelles le joueur n’a jamais répondu. Le score utilise les multiplicateurs de difficulté de MySQL. Le classement cumule les points de toutes les parties terminées dans le thème sélectionné, quelle que soit leur longueur. Deux totaux égaux partagent le même rang.
-
-Le prototype JavaScript reste accessible via `public/index.html`. Voir le [flux du quiz](docs/flux-quiz.md) et les [contrôles de livraison](tests/recette.md).
+Pour un premier contrôle, créez un compte, jouez une partie et vérifiez son bilan. Ouvrez ensuite le classement du thème pour retrouver vos points. Vous pouvez aussi ouvrir un autre thème pour vérifier que les résultats restent séparés.
