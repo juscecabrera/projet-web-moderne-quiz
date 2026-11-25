@@ -3,9 +3,8 @@ $links = [
     'accueil.php' => ['⌂', 'Accueil'],
     'themes.php' => ['◇', 'Thèmes'],
     'classement.php' => ['♜', 'Classement'],
-    'profil.php' => ['◎', 'Mon profil'],
+    'profil.php' => ['◎', 'Mon compte'],
 ];
-$initial = mb_strtoupper(mb_substr($pseudo, 0, 1, 'UTF-8'), 'UTF-8');
 ?>
 <a class="declic-skip" href="#contenu">Aller au contenu</a>
 <aside class="declic-rail">
@@ -18,7 +17,11 @@ $initial = mb_strtoupper(mb_substr($pseudo, 0, 1, 'UTF-8'), 'UTF-8');
         <?php endforeach; ?>
     </nav>
     <a class="declic-user" href="profil.php">
-        <span class="declic-initial" aria-hidden="true"><?= quiz_escape($initial) ?></span>
+        <?php if ($hasPhoto): ?>
+            <img class="declic-avatar" src="photo-compte.php" alt="">
+        <?php else: ?>
+            <span class="declic-initial" aria-hidden="true"><?= quiz_escape(quiz_avatar_initial($pseudo)) ?></span>
+        <?php endif; ?>
         <span><?= quiz_escape($pseudo) ?></span>
     </a>
 </aside>

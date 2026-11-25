@@ -18,14 +18,16 @@ La base de données permet de gérer les utilisateurs, les catégories, les nive
 | `donnees_test.sql` | Insertion des catégories, difficultés, questions et réponses |
 | `questions_niveaux.sql` | Ajout des questions de Géographie et de Sciences par difficulté |
 | `migration_scores_decimaux.sql` | Migration des scores pour une base déjà installée |
+| `migration_photos_profils.sql` | Ajout du stockage des photos sur une base existante |
 
 ## 3. Structure de la base de données
 
-La base contient 7 tables :
+La base contient 8 tables :
 
 | Table | Rôle |
 |---|---|
 | `utilisateurs` | Stockage des informations des joueurs |
+| `photos_profils` | Stockage des photos facultatives des joueurs |
 | `categories` | Organisation des questions par thème |
 | `difficultes` | Gestion des niveaux de difficulté et des multiplicateurs |
 | `questions` | Stockage des questions du quiz |
@@ -54,9 +56,10 @@ Démarrer WAMP et vérifier que le service MySQL fonctionne.
 3. Sélectionner le fichier `database/schema.sql`.
 4. Lancer l'importation.
 
-Le script crée la base `quiz_culture_generale` et ses sept tables.
+Le script crée la base `quiz_culture_generale` et ses huit tables.
 
 Si la base existe déjà avec des scores entiers, importer `database/migration_scores_decimaux.sql` pour conserver les demi-points.
+Si la base a été créée avant l’ajout des photos de profil, importer `database/migration_photos_profils.sql`.
 
 ### Étape 3 — Ajouter les données de test
 
@@ -80,6 +83,7 @@ php -S 127.0.0.1:8080 -t public
 Ouvrir [le quiz](http://127.0.0.1:8080/) et cliquer sur **Créer un compte**.
 La configuration locale par défaut utilise MySQL sur `127.0.0.1:3306` avec la base `quiz_culture_generale` et l’utilisateur `root` sans mot de passe.
 Définir `QUIZ_DB_HOST`, `QUIZ_DB_PORT`, `QUIZ_DB_NAME`, `QUIZ_DB_USER` et `QUIZ_DB_PASSWORD` si nécessaire.
+Pour les photos, activer l’extension PHP `gd` avec les formats JPEG, PNG et WebP. Configurer `upload_max_filesize` à au moins `3M` et `post_max_size` au-dessus de cette limite.
 Définir `QUIZ_QUESTION_LIMIT` entre 1 et 10 pour modifier la longueur des nouvelles parties. La valeur par défaut est 10.
 
 Avec Apache dans WampServer et le projet dans `C:\wamp64\www\projet-web-moderne-quiz`, ouvrir [le point d’entrée PHP](http://localhost/projet-web-moderne-quiz/public/index.php). En hébergement, utiliser `public/` comme racine web.

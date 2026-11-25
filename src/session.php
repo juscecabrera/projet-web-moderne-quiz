@@ -37,6 +37,16 @@ function quiz_csrf_token(): string
     return $_SESSION['csrf_token'] ??= bin2hex(random_bytes(32));
 }
 
+function quiz_sign_out(): never
+{
+    $cookie = session_get_cookie_params();
+    unset($cookie['lifetime']);
+    $_SESSION = [];
+    session_destroy();
+    setcookie(session_name(), '', $cookie + ['expires' => time() - 3600]);
+    quiz_redirect('connexion.php');
+}
+
 function quiz_require_post_token(): void
 {
     if ($_SERVER['REQUEST_METHOD'] !== 'POST') {

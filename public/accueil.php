@@ -2,9 +2,17 @@
 declare(strict_types=1);
 
 require __DIR__ . '/../src/session.php';
-quiz_require_user();
+require __DIR__ . '/../src/database.php';
+require __DIR__ . '/../src/account-photo.php';
+$userId = quiz_require_user();
 
 $pseudo = $_SESSION['pseudo'];
+$hasPhoto = false;
+try {
+    $hasPhoto = quiz_photo_for_user(quiz_database(), $userId) !== null;
+} catch (PDOException $exception) {
+    error_log($exception->getMessage());
+}
 $activePage = 'accueil.php';
 ?>
 <!doctype html>
@@ -42,7 +50,7 @@ $activePage = 'accueil.php';
                 <a class="home-card" href="profil.php">
                     <img src="assets/images/accueil-profil.webp" alt="">
                     <div>
-                        <h2>Mon profil</h2>
+                        <h2>Mon compte</h2>
                         <p>Retrouve ton compte et ton pseudo public.</p>
                         <span class="home-arrow" aria-hidden="true">→</span>
                     </div>

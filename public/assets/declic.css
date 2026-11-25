@@ -74,7 +74,7 @@
 
 .declic-user:hover { color: var(--amber); }
 
-.declic-initial {
+.declic-initial, .declic-avatar {
   display: grid;
   width: 2.45rem;
   height: 2.45rem;
@@ -86,6 +86,59 @@
   color: var(--amber);
   font: 800 1.05rem/1 var(--display);
 }
+
+.declic-avatar { object-fit: cover; }
+
+.declic-account { min-width: 0; padding: 0 clamp(1rem, 3vw, 3.5rem) 3rem; }
+.account-hero {
+  display: grid;
+  align-items: end;
+  min-height: clamp(10rem, 23vw, 19rem);
+  margin: 0 calc(-1 * clamp(1rem, 3vw, 3.5rem)) 1.25rem;
+  padding: 1.25rem clamp(1rem, 3vw, 3.5rem);
+  background: linear-gradient(90deg, var(--ink), #071c2560), linear-gradient(0deg, var(--ink), transparent 55%),
+              url("images/accueil-profil.webp") center right / cover;
+}
+.account-hero h1 { margin: 0; font: 900 clamp(2.65rem, 6vw, 6rem)/1 var(--display); letter-spacing: -0.055em; }
+.account-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: stretch; gap: 1rem; }
+.account-card { min-width: 0; padding: clamp(1rem, 2vw, 1.6rem); border: 1px solid var(--rule); border-radius: 0.85rem; background: #0a222c; }
+.account-card h2 { margin: 0 0 1rem; font-size: clamp(1.4rem, 3vw, 2rem); line-height: 1.15; }
+.account-card form, .account-card label { display: grid; gap: 0.4rem; min-width: 0; }
+.account-card form { gap: 0.85rem; }
+.account-card input:not([type="checkbox"]) {
+  width: 100%;
+  min-width: 0;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid #8f9187;
+  border-radius: 0.45rem;
+  background: #102a34;
+  color: var(--ivory);
+  font: inherit;
+}
+.account-card button, .account-card summary {
+  width: fit-content;
+  min-height: 2.6rem;
+  padding: 0.55rem 0.9rem;
+  border: 1px solid transparent;
+  border-radius: 0.45rem;
+  background: var(--amber);
+  color: #23170c;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+.account-card summary, .account-card .account-outline { background: transparent; border-color: var(--rule); color: var(--ivory); }
+.account-card button:hover, .account-card summary:hover { border-color: var(--amber); }
+.account-card :focus-visible { outline: 2px solid var(--amber); outline-offset: 3px; }
+.account-avatar-preview { display: flex; align-items: flex-start; gap: 0.85rem; margin-bottom: 1.2rem; }
+.account-avatar-preview :is(.declic-avatar, .declic-initial) { width: 4rem; height: 4rem; font-size: 1.55rem; }
+.account-avatar-preview details { min-width: 0; }
+.account-avatar-preview details form { margin-top: 0.7rem; }
+.account-card .account-check { display: flex; gap: 0.5rem; align-items: center; }
+.account-danger { margin-top: 1.1rem; padding-top: 1rem; border-top: 1px solid var(--rule); }
+.account-danger summary, .account-danger .account-outline { color: #ff9c8b; border-color: #ff9c8b70; }
+.account-message { padding: 0.75rem 1rem; border-inline-start: 3px solid var(--amber); background: #102e37; }
+.account-error { border-color: #ff9c8b; background: #3b282b; }
 
 .home-hero {
   min-height: clamp(26rem, 47vw, 38rem);
@@ -174,6 +227,7 @@
   .declic-icon { font-size: 1rem; }
   .declic-user { margin: 0; padding: 0.55rem 0 0; }
   .home-hero { min-height: 23rem; }
+  .account-grid { grid-template-columns: minmax(0, 1fr); }
 }
 
 @media (max-width: 540px) {
