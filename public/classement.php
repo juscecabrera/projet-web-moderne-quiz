@@ -4,15 +4,20 @@ declare(strict_types=1);
 require __DIR__ . '/../src/session.php';
 require __DIR__ . '/../src/database.php';
 require __DIR__ . '/../src/game.php';
-quiz_require_user();
+require __DIR__ . '/../src/account-photo.php';
+$userId = quiz_require_user();
+$pseudo = $_SESSION['pseudo'];
+$activePage = 'classement.php';
+$hasPhoto = false;
+$ownRank = null;
 
 $themeId = filter_input(INPUT_GET, 'theme_id', FILTER_VALIDATE_INT);
 $themes = $ranking = [];
 $error = '';
 try {
     $database = quiz_database();
-    $categories = $database->query('SELECT id_categorie, nom_categorie FROM categories ORDER BY nom_categorie');
-    $themes = array_column($categories->fetchAll(PDO::FETCH_ASSOC), 'nom_categorie', 'id_categorie');
+    $hasPhoto = quiz_photo_for_user($database, $userId) !== null;
+    $themes = array_column(quiz_themes($database), 'nom_categorie', 'id_categorie');
     if ($themeId === null) {
         $themeId = array_key_first($themes);
     }
@@ -21,6 +26,12 @@ try {
         $error = 'Choisissez un thème proposé.';
     } elseif ($themeId !== null) {
         $ranking = quiz_ranking($database, $themeId);
+        foreach ($ranking as $entry) {
+            if ((int) $entry['id_utilisateur'] === $userId) {
+                $ownRank = $entry;
+                break;
+            }
+        }
     }
 } catch (PDOException $exception) {
     error_log($exception->getMessage());
@@ -33,44 +44,56 @@ try {
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Classement · Quiz de culture générale</title>
-    <link rel="stylesheet" href="assets/style.css">
+    <title>Classement · Déclic</title>
+    <link rel="stylesheet" href="assets/declic.css">
 </head>
-<body>
-    <main class="account-panel theme-panel">
-        <h1>Classement</h1>
-        <?php if ($themes): ?>
-            <form method="get">
-                <div>
-                    <label for="ranking-theme">Thème</label>
-                    <select id="ranking-theme" name="theme_id">
-                        <?php foreach ($themes as $id => $name): ?>
-                            <option value="<?= $id ?>" <?= $id === $themeId ? 'selected' : '' ?>><?= quiz_escape($name) ?></option>
-                        <?php endforeach; ?>
-                    </select>
-                </div>
-                <button class="btn btn-primary">Afficher le classement</button>
-            </form>
-        <?php endif; ?>
-        <?php if ($error !== ''): ?>
-            <p role="alert"><?= quiz_escape($error) ?></p>
-        <?php elseif (!$ranking): ?>
-            <p>Aucun joueur n’a encore terminé de quiz dans ce thème.</p>
-        <?php else: ?>
-            <table class="quiz-table">
-                <thead><tr><th scope="col">Rang</th><th scope="col">Pseudo</th><th scope="col">Points cumulés</th></tr></thead>
-                <tbody>
-                    <?php foreach ($ranking as $entry): ?>
-                        <tr>
-                            <td><?= (int) $entry['rang'] ?></td>
-                            <td><?= quiz_escape($entry['pseudo']) ?></td>
-                            <td><?= quiz_escape(quiz_game_points($entry['points'])) ?></td>
-                        </tr>
+<body class="declic-layout">
+    <?php require __DIR__ . '/../src/declic-navigation.php'; ?>
+    <main id="contenu" class="game-page">
+        <header class="game-banner ranking-banner">
+            <img src="assets/images/accueil-classement.webp" alt="">
+            <h1>Classement</h1>
+            <p>Les points cumulés de chaque joueur par thème.</p>
+        </header>
+        <div class="game-content">
+            <?php if ($themes): ?>
+                <nav class="ranking-themes" aria-label="Thèmes du classement">
+                    <?php foreach ($themes as $id => $name): ?>
+                        <a href="classement.php?theme_id=<?= (int) $id ?>" <?= (int) $id === $themeId ? 'aria-current="page"' : '' ?>>
+                            <?= quiz_escape($name) ?>
+                        </a>
                     <?php endforeach; ?>
-                </tbody>
-            </table>
-        <?php endif; ?>
-        <p><a href="accueil.php">Retour à l’accueil</a></p>
+                </nav>
+            <?php endif; ?>
+            <?php if ($error !== ''): ?>
+                <p class="account-message account-error" role="alert"><?= quiz_escape($error) ?></p>
+            <?php else: ?>
+                <h2><?= quiz_escape($themes[$themeId] ?? 'Thèmes') ?></h2>
+                <?php if ($ownRank): ?>
+                    <p class="ranking-position">Ton rang : <strong><?= (int) $ownRank['rang'] ?></strong> · <?= quiz_escape(quiz_game_points($ownRank['points'])) ?> pts</p>
+                <?php endif; ?>
+                <?php if (!$ranking): ?>
+                    <p>Aucun joueur n’a encore terminé de quiz dans ce thème.</p>
+                <?php else: ?>
+                    <table class="ranking-table" aria-label="Classement du thème <?= quiz_escape($themes[$themeId]) ?>">
+                        <thead><tr><th scope="col">Rang</th><th scope="col">Joueur</th><th scope="col">Points</th></tr></thead>
+                        <tbody>
+                            <?php foreach ($ranking as $entry): ?>
+                                <tr class="<?= (int) $entry['rang'] === 1 ? 'ranking-leader' : '' ?>">
+                                    <td><?= (int) $entry['rang'] ?></td>
+                                    <th scope="row">
+                                        <span class="declic-initial" aria-hidden="true"><?= quiz_escape(quiz_avatar_initial($entry['pseudo'])) ?></span>
+                                        <?= quiz_escape($entry['pseudo']) ?>
+                                    </th>
+                                    <td><?= quiz_escape(quiz_game_points($entry['points'])) ?></td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                    <p class="ranking-note">Toutes les parties terminées dans ce thème comptent.</p>
+                <?php endif; ?>
+            <?php endif; ?>
+        </div>
     </main>
 </body>
 </html>

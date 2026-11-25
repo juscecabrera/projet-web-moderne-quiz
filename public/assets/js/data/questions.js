@@ -857,8 +857,8 @@ window.Quiz.QUESTIONS = [
   },
   {
     id: 66,
-    enonce: 'Avec quel type de ballon joue-t-on au rugby ?',
-    explication: 'Le rugby se joue avec un ballon ovale.',
+    enonce: 'Dans quel sport utilise-t-on habituellement un ballon ovale pour marquer un essai ?',
+    explication: 'Au rugby, le ballon est ovale et l’on peut marquer un essai.',
     categorieId: 4,
     difficulteId: 1,
     reponses: [
@@ -870,8 +870,8 @@ window.Quiz.QUESTIONS = [
   },
   {
     id: 67,
-    enonce: 'Combien de points vaut un touchdown au football américain ?',
-    explication: 'Au football américain, un touchdown rapporte 6 points.',
+    enonce: 'Dans quel sport un touchdown vaut-il six points ?',
+    explication: 'Un touchdown au football américain rapporte six points avant la transformation.',
     categorieId: 4,
     difficulteId: 1,
     reponses: [
@@ -1039,8 +1039,8 @@ window.Quiz.QUESTIONS = [
   },
   {
     id: 80,
-    enonce: 'Quel joueur détient le record de buts en Coupe du monde masculine ?',
-    explication: 'Miroslav Klose a marqué 16 buts en Coupe du monde, record absolu.',
+    enonce: 'Quel joueur a atteint 16 buts en Coupe du monde masculine lors de l’édition 2014 ?',
+    explication: 'Miroslav Klose a marqué son seizième but en Coupe du monde face au Brésil en 2014.',
     categorieId: 4,
     difficulteId: 5,
     reponses: [

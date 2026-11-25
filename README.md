@@ -70,7 +70,7 @@ Si la base a été créée avant l’ajout des photos de profil, importer `datab
 
 **Attention :** importer les données de test une seule fois, dans une base vide, afin d'éviter les doublons.
 
-Importer ensuite `database/questions_niveaux.sql`. Ce script est réimportable et s’applique aussi aux bases déjà remplies. Il complète Géographie et Sciences jusqu’à 200 questions jouables chacun et ajoute le thème Arts et divertissement. Histoire, Sport, Culture générale et Arts et divertissement disposent d’un stock plus court par niveau.
+Importer ensuite `database/questions_niveaux.sql`. Ce script réimportable ajoute le thème Arts et divertissement, garantit au moins dix questions pour chaque combinaison thème et difficulté et corrige plusieurs énoncés de Sport sur les bases existantes.
 
 ### Lancer le parcours PHP en local
 
@@ -147,7 +147,7 @@ SELECT 'Reponses', COUNT(*)
 FROM reponses;
 ```
 
-Le jeu de données initial contient 5 catégories, 5 difficultés, 96 questions et 384 réponses. Après l’import des questions complémentaires, il contient **6 catégories, 477 questions et 1 908 réponses**, en incluant les niveaux historiques.
+Le jeu de données initial contient 5 catégories, 5 difficultés, 96 questions et 384 réponses. Après l’import des questions complémentaires, il contient **6 catégories, 547 questions et 2 188 réponses**, en incluant les niveaux historiques.
 
 ## 8. Intégration avec l'application
 

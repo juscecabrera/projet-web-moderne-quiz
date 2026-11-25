@@ -390,13 +390,13 @@ VALUES
  4, 1, 'validee'),
 
 (66,
- 'Avec quel type de ballon joue-t-on au rugby ?',
- 'Le rugby se joue avec un ballon ovale.',
+ 'Dans quel sport utilise-t-on habituellement un ballon ovale pour marquer un essai ?',
+ 'Au rugby, le ballon est ovale et l’on peut marquer un essai.',
  4, 1, 'validee'),
 
 (67,
- 'Combien de points vaut un touchdown au football américain ?',
- 'Au football américain, un touchdown rapporte 6 points.',
+ 'Dans quel sport un touchdown vaut-il six points ?',
+ 'Un touchdown au football américain rapporte six points avant la transformation.',
  4, 1, 'validee'),
 
 (68,
@@ -460,8 +460,8 @@ VALUES
  4, 5, 'validee'),
 
 (80,
- 'Quel joueur détient le record de buts en Coupe du monde masculine ?',
- 'Miroslav Klose a marqué 16 buts en Coupe du monde, record absolu.',
+ 'Quel joueur a atteint 16 buts en Coupe du monde masculine lors de l’édition 2014 ?',
+ 'Miroslav Klose a marqué son seizième but en Coupe du monde face au Brésil en 2014.',
  4, 5, 'validee'),
 
 -- CULTURE GENERALE (81 a 96)

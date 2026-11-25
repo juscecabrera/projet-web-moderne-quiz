@@ -16,6 +16,76 @@ CREATE TEMPORARY TABLE questions_niveaux (
 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 INSERT INTO questions_niveaux VALUES
+(2, 1, 'Quel peuple a construit le Colisée de Rome ?', 'Les Romains', 'Les Vikings', 'Les Aztèques', 'Les Incas', 'Le Colisée date de l’Empire romain.'),
+(2, 1, 'Quel pays était dirigé par les pharaons ?', 'Égypte', 'Grèce', 'Norvège', 'Chine', 'Les pharaons régnaient sur l’Égypte antique.'),
+(2, 1, 'Dans quelle ville est tombé le mur en 1989 ?', 'Berlin', 'Vienne', 'Paris', 'Rome', 'La chute du mur de Berlin a eu lieu le 9 novembre 1989.'),
+(2, 1, 'Quel événement est commémoré en France le 8 mai ?', 'La victoire de 1945 en Europe', 'L’armistice de 1918', 'La prise de la Bastille', 'La fin de la guerre de Cent Ans', 'Le 8 mai 1945 marque la fin des combats en Europe.'),
+(2, 1, 'Quel dirigeant français a été sacré empereur en 1804 ?', 'Napoléon Bonaparte', 'Louis XVI', 'Charlemagne', 'Henri IV', 'Napoléon Bonaparte a été sacré à Notre-Dame de Paris.'),
+(2, 2, 'En quelle année la Déclaration d’indépendance des États-Unis a-t-elle été adoptée ?', '1776', '1789', '1812', '1865', 'Le Congrès continental l’a adoptée le 4 juillet 1776.'),
+(2, 2, 'Quels royaumes étaient les principaux adversaires de la guerre de Cent Ans ?', 'France et Angleterre', 'Espagne et Portugal', 'Suède et Danemark', 'France et Italie', 'Les couronnes de France et d’Angleterre s’affrontaient notamment pour le trône de France.'),
+(2, 2, 'Quel navire a coulé lors de son voyage inaugural en 1912 ?', 'Le Titanic', 'Le Lusitania', 'Le Queen Mary', 'Le Santa Maria', 'Le Titanic a heurté un iceberg lors de sa traversée vers New York.'),
+(2, 2, 'Quelle cité romaine a été ensevelie par le Vésuve en 79, avec Herculanum ?', 'Pompéi', 'Carthage', 'Sparte', 'Éphèse', 'L’éruption du Vésuve a enseveli Pompéi sous des cendres et des pierres ponces.'),
+(2, 2, 'Quel État lance Spoutnik 1 en 1957 ?', 'L’Union soviétique', 'Les États-Unis', 'La France', 'Le Japon', 'Spoutnik 1 est le premier satellite artificiel placé en orbite.'),
+(2, 2, 'Quel empereur a donné son nom à l’arc construit près du Colisée pour célébrer sa victoire sur Maxence ?', 'Constantin', 'Auguste', 'Néron', 'Trajan', 'L’arc de Constantin commémore la victoire de Constantin sur Maxence.'),
+(2, 3, 'En quelle année se déroule la bataille de Hastings ?', '1066', '1215', '1415', '1492', 'Guillaume le Conquérant bat Harold II en 1066.'),
+(2, 3, 'Quel traité de 1919 fixe les conditions de paix avec l’Allemagne après la Première Guerre mondiale ?', 'Le traité de Versailles', 'Le traité de Tordesillas', 'Le traité de Rome', 'Le traité d’Utrecht', 'Le traité de Versailles est signé le 28 juin 1919.'),
+(2, 3, 'Quelle dynastie est fondée par Hugues Capet ?', 'Les Capétiens', 'Les Carolingiens', 'Les Mérovingiens', 'Les Plantagenêts', 'Hugues Capet est élu roi en 987.'),
+(2, 3, 'Quel roi anglais accepte la Magna Carta en 1215 ?', 'Jean sans Terre', 'Henri VIII', 'Richard III', 'Édouard Ier', 'Jean sans Terre accepte la charte à Runnymede.'),
+(2, 3, 'Qui a succédé à Lénine à la tête du gouvernement soviétique en 1924 ?', 'Alexeï Rykov', 'Joseph Staline', 'Léon Trotski', 'Nikita Khrouchtchev', 'Rykov prend en 1924 la présidence du Conseil des commissaires du peuple.'),
+(4, 1, 'Dans quel sport marque-t-on des paniers ?', 'Basket-ball', 'Tennis', 'Cyclisme', 'Rugby', 'Au basket-ball, on marque en faisant passer le ballon dans le panier.'),
+(4, 1, 'Quel sport de combat utilise normalement des gants rembourrés et un ring ?', 'La boxe anglaise', 'L’escrime', 'Le judo', 'La lutte gréco-romaine', 'La boxe anglaise se pratique sur un ring avec des gants.'),
+(4, 1, 'Dans quel sport emploie-t-on une raquette et un volant ?', 'Badminton', 'Tennis', 'Squash', 'Tennis de table', 'Le volant remplace la balle au badminton.'),
+(4, 1, 'Avec quel équipement frappe-t-on la balle au golf ?', 'Un club', 'Une crosse', 'Une batte', 'Un arc', 'Le golfeur choisit un club selon le coup à jouer.'),
+(4, 1, 'Dans quel sport la brasse est-elle une technique de déplacement ?', 'Natation', 'Aviron', 'Plongeon', 'Surf', 'La brasse est l’une des nages pratiquées en compétition.'),
+(4, 2, 'Quelle est la distance officielle d’un marathon ?', '42,195 km', '40 km', '41,195 km', '45 km', 'Le marathon est une course de 42,195 kilomètres.'),
+(4, 2, 'Quelle ville accueille les premiers Jeux olympiques d’hiver en 1924 ?', 'Chamonix', 'Grenoble', 'Albertville', 'Innsbruck', 'Les premiers Jeux d’hiver ont lieu à Chamonix en 1924.'),
+(4, 2, 'Que signifie le carton rouge lorsqu’il est montré directement à un joueur de football sur le terrain ?', 'Il est expulsé', 'Il reçoit un simple avertissement', 'Il doit changer de poste', 'Il obtient un penalty', 'Le carton rouge signifie une exclusion du match.'),
+(4, 2, 'Combien de points vaut un essai en rugby à XV avant la transformation ?', '5', '3', '6', '7', 'Un essai rapporte cinq points. La transformation vaut deux points supplémentaires.'),
+(4, 2, 'Quelle est la surface de jeu de Roland-Garros ?', 'Terre battue', 'Gazon', 'Parquet', 'Glace', 'Le tournoi est disputé sur des courts en terre battue.'),
+(4, 3, 'À quelle distance de la ligne de but se trouve le point de penalty au football ?', '11 m', '9 m', '12 m', '16,5 m', 'Les lois du jeu placent le point à onze mètres du milieu de la ligne de but.'),
+(4, 3, 'Combien d’épreuves compte le décathlon ?', '10', '5', '7', '12', 'Le décathlon combine dix épreuves d’athlétisme.'),
+(4, 3, 'Quelle arme est absente de l’escrime olympique ?', 'Rapière', 'Épée', 'Fleuret', 'Sabre', 'Les trois armes olympiques sont l’épée, le fleuret et le sabre.'),
+(4, 3, 'Quel agrès de gymnastique artistique masculine se compose de deux poignées fixées sur un appareil horizontal ?', 'Cheval d’arçons', 'Anneaux', 'Barre fixe', 'Arçons de saut', 'Le cheval d’arçons porte deux poignées sur lesquelles le gymnaste prend appui.'),
+(4, 3, 'Quelle distance parcourt-on dans l’épreuve olympique de steeple en athlétisme ?', '3 000 m', '1 500 m', '5 000 m', '10 000 m', 'Le steeple olympique se dispute sur trois mille mètres avec des obstacles.'),
+(4, 3, 'Quel pays a remporté la première Coupe du monde masculine de football en 1930 ?', 'Uruguay', 'Argentine', 'Brésil', 'Italie', 'L’Uruguay remporte la finale face à l’Argentine.'),
+(5, 1, 'Combien de faces a un dé cubique ?', '6', '4', '8', '12', 'Un cube possède six faces.'),
+(5, 1, 'Combien de jours compte une semaine ?', '7', '5', '6', '8', 'La semaine est divisée en sept jours.'),
+(5, 1, 'Quel courrier demande habituellement une signature à la remise en France ?', 'Un courrier recommandé avec remise contre signature', 'Une carte postale ordinaire', 'Une lettre verte ordinaire', 'Une publicité en boîte aux lettres', 'La remise contre signature permet d’attester la réception.'),
+(5, 1, 'Combien d’objets trouve-t-on dans une douzaine ?', '12', '10', '15', '20', 'Une douzaine correspond à douze unités.'),
+(5, 1, 'Que signifie le sigle PDF dans le nom d’un fichier ?', 'Portable Document Format', 'Personal Data Folder', 'Public Draft File', 'Printable Display Form', 'PDF signifie Portable Document Format.'),
+(5, 2, 'Quel ingrédient principal entre dans la préparation du houmous traditionnel ?', 'Pois chiches', 'Lentilles vertes', 'Pommes de terre', 'Haricots rouges', 'Le houmous est préparé à partir de pois chiches, souvent avec du tahini.'),
+(5, 2, 'Dans quel jeu de plateau trouve-t-on une case appelée « Départ » qui donne un salaire lorsqu’on la franchit ?', 'Monopoly', 'Dames', 'Échecs', 'Backgammon', 'Dans le Monopoly, passer par la case Départ donne le salaire prévu par les règles.'),
+(5, 2, 'Que désigne le mot « bilingue » ?', 'Qui utilise deux langues', 'Qui écrit deux alphabets', 'Qui parle trois langues', 'Qui traduit toujours à l’écrit', 'Une personne bilingue utilise deux langues.'),
+(5, 2, 'Quelle forme obtient-on en superposant deux triangles équilatéraux opposés dans l’étoile de David ?', 'Une étoile à six branches', 'Une étoile à cinq branches', 'Un octogone seul', 'Un losange seul', 'Les sommets extérieurs des deux triangles forment six branches.'),
+(5, 2, 'Combien de cases compte un échiquier standard ?', '64', '49', '81', '100', 'Un échiquier compte huit rangées de huit cases.'),
+(5, 2, 'Dans un ordre du jour, que désigne l’expression « questions diverses » ?', 'Les sujets restants abordés en réunion', 'La liste des présences', 'La date de la prochaine réunion', 'Le compte rendu déjà approuvé', 'Cette rubrique permet de traiter des sujets qui ne figurent pas dans les points principaux.'),
+(5, 3, 'À quel nombre correspond le chiffre romain XL ?', '40', '60', '90', '110', 'Le X placé avant L indique que l’on soustrait dix à cinquante.'),
+(5, 3, 'Qu’est-ce qu’un palindrome ?', 'Une suite qui se lit dans les deux sens', 'Un mot construit à partir d’initiales', 'Un mot de sens opposé à un autre', 'Une rime entre deux vers', '« Radar » se lit de la même façon dans les deux sens.'),
+(5, 3, 'Que représente le Q dans le sigle QR d’un code QR ?', 'Quick', 'Question', 'Quality', 'Quantity', 'QR signifie Quick Response.'),
+(5, 3, 'Quel terme désigne un mot composé à partir des lettres réordonnées d’un autre ?', 'Anagramme', 'Homonyme', 'Pléonasme', 'Euphémisme', '« Niche » et « chien » utilisent les mêmes lettres dans un ordre différent.'),
+(5, 3, 'À quelle famille de jeux appartient le go ?', 'Jeux de placement sur un plateau', 'Jeux de cartes à plis', 'Jeux de dés', 'Jeux de devinettes', 'Au go, on pose des pierres sur les intersections d’un plateau.'),
+(5, 3, 'Quel est le nom de l’unité qui correspond à 1 024 octets ?', 'Kibioctet', 'Kilobit', 'Kilo-octet décimal', 'Mébioctet', 'Le préfixe binaire kibi désigne 2¹⁰, soit 1 024.'),
+(6, 1, 'Qui a écrit Les Misérables ?', 'Victor Hugo', 'Molière', 'Émile Zola', 'Albert Camus', 'Les Misérables est un roman de Victor Hugo.'),
+(6, 1, 'Quel instrument a généralement six cordes et se joue en les pinçant ?', 'La guitare classique', 'La trompette', 'Le piano', 'Le saxophone', 'Une guitare classique comporte généralement six cordes.'),
+(6, 1, 'Quel métier consiste à guider les interprètes d’un orchestre ?', 'Chef d’orchestre', 'Chef opérateur', 'Accessoiriste', 'Monteur', 'Le chef d’orchestre dirige l’exécution musicale.'),
+(6, 1, 'Quel instrument de la famille des cordes se joue habituellement avec un archet et se tient sous le menton ?', 'Le violon', 'La harpe', 'La contrebasse', 'Le violoncelle', 'Le violon repose entre l’épaule et le menton.'),
+(6, 1, 'Comment appelle-t-on une image obtenue avec un appareil photo ?', 'Une photographie', 'Un sonnet', 'Une chorégraphie', 'Un dialogue', 'L’appareil photo enregistre une image par l’action de la lumière.'),
+(6, 1, 'Dans quel art travaille principalement un chorégraphe ?', 'La danse', 'La sculpture', 'L’architecture', 'La gravure', 'Le chorégraphe compose des mouvements destinés aux danseurs.'),
+(6, 1, 'Quel personnage de fiction a un nez qui s’allonge lorsqu’il ment ?', 'Pinocchio', 'Peter Pan', 'Bambi', 'Cendrillon', 'Dans l’histoire de Pinocchio, son nez s’allonge notamment lorsqu’il ment.'),
+(6, 2, 'Qui a peint La Joconde ?', 'Léonard de Vinci', 'Michel-Ange', 'Raphaël', 'Botticelli', 'La Joconde est une œuvre de Léonard de Vinci.'),
+(6, 2, 'Qui a écrit Le Malade imaginaire ?', 'Molière', 'Racine', 'Corneille', 'Marivaux', 'Le Malade imaginaire est une comédie-ballet de Molière.'),
+(6, 2, 'Quel compositeur a créé l’opéra La Flûte enchantée ?', 'Wolfgang Amadeus Mozart', 'Antonio Vivaldi', 'Giuseppe Verdi', 'Georges Bizet', 'La Flûte enchantée est un opéra de Mozart.'),
+(6, 2, 'Quel personnage mène l’enquête dans Le Chien des Baskerville ?', 'Sherlock Holmes', 'Hercule Poirot', 'Arsène Lupin', 'Le commissaire Maigret', 'Sherlock Holmes et le docteur Watson enquêtent dans ce roman de Conan Doyle.'),
+(6, 2, 'Quel peintre espagnol a réalisé Guernica ?', 'Pablo Picasso', 'Francisco de Goya', 'Salvador Dalí', 'Diego Velázquez', 'Picasso a peint Guernica en 1937.'),
+(6, 2, 'Dans quelle saga le personnage de Yoda apparaît-il ?', 'Star Wars', 'Star Trek', 'Le Seigneur des anneaux', 'Retour vers le futur', 'Yoda est un maître Jedi dans Star Wars.'),
+(6, 2, 'Quel terme désigne la musique enregistrée pour accompagner un film ?', 'Bande originale', 'Générique de fin', 'Scénario', 'Storyboard', 'La bande originale rassemble les morceaux associés au film.'),
+(6, 3, 'Quel peintre a réalisé Impression, soleil levant ?', 'Claude Monet', 'Pierre-Auguste Renoir', 'Edgar Degas', 'Camille Pissarro', 'Le titre de cette toile de Monet a donné son nom à l’impressionnisme.'),
+(6, 3, 'Quel compositeur a écrit le ballet Le Lac des cygnes ?', 'Piotr Ilitch Tchaïkovski', 'Igor Stravinsky', 'Serge Prokofiev', 'Nikolaï Rimski-Korsakov', 'La musique du Lac des cygnes est de Tchaïkovski.'),
+(6, 3, 'Qui a écrit Cent ans de solitude ?', 'Gabriel García Márquez', 'Jorge Luis Borges', 'Pablo Neruda', 'Julio Cortázar', 'Le roman raconte l’histoire de la famille Buendía.'),
+(6, 3, 'Quel architecte a conçu la maison sur la cascade Fallingwater ?', 'Frank Lloyd Wright', 'Le Corbusier', 'Walter Gropius', 'Ludwig Mies van der Rohe', 'Fallingwater est une maison conçue par Frank Lloyd Wright en Pennsylvanie.'),
+(6, 3, 'Qui a peint Les Ménines ?', 'Diego Velázquez', 'Francisco de Goya', 'Le Greco', 'Bartolomé Esteban Murillo', 'Velázquez représente l’infante Marguerite et sa suite dans Les Ménines.'),
+(6, 3, 'Quel compositeur a écrit le Boléro créé en 1928 ?', 'Maurice Ravel', 'Claude Debussy', 'Erik Satie', 'Camille Saint-Saëns', 'Le Boléro de Ravel développe un motif qui se répète et s’amplifie.'),
+(6, 3, 'Quel cinéaste a réalisé Le Voyage de Chihiro ?', 'Hayao Miyazaki', 'Isao Takahata', 'Satoshi Kon', 'Mamoru Hosoda', 'Hayao Miyazaki a réalisé ce film pour le studio Ghibli.'),
 (6, 1, 'Qui a écrit Le Petit Prince ?', 'Antoine de Saint-Exupéry', 'Jules Verne', 'Victor Hugo', 'Marcel Proust', 'Antoine de Saint-Exupéry a écrit et illustré Le Petit Prince.'),
 (6, 1, 'Quel instrument possède généralement des touches noires et blanches ?', 'Le piano', 'La trompette', 'Le violon', 'La clarinette', 'Le piano est un instrument à clavier.'),
 (6, 1, 'Quel art consiste à modeler ou à tailler une matière pour créer des formes ?', 'La sculpture', 'La photographie', 'Le chant', 'Le cinéma', 'La sculpture crée des formes en volume.'),
@@ -415,7 +485,7 @@ START TRANSACTION;
 INSERT INTO questions (id_categorie, id_difficulte, enonce, explication, statut_validation)
 SELECT c.id_categorie, n.niveau, n.enonce, n.explication, 'validee'
 FROM questions_niveaux n
-JOIN categories c ON c.nom_categorie = CASE n.theme_id WHEN 1 THEN 'Géographie' WHEN 3 THEN 'Sciences' ELSE 'Arts et divertissement' END
+JOIN categories c ON c.nom_categorie = ELT(n.theme_id, 'Géographie', 'Histoire', 'Sciences', 'Sport', 'Culture générale', 'Arts et divertissement')
 WHERE NOT EXISTS (
     SELECT 1 FROM questions q WHERE q.id_categorie = c.id_categorie AND q.enonce = n.enonce
 );
@@ -423,7 +493,7 @@ WHERE NOT EXISTS (
 CREATE TEMPORARY TABLE questions_niveaux_a_remplir AS
 SELECT q.id_question, n.bonne, n.choix_b, n.choix_c, n.choix_d
 FROM questions_niveaux n
-JOIN categories c ON c.nom_categorie = CASE n.theme_id WHEN 1 THEN 'Géographie' WHEN 3 THEN 'Sciences' ELSE 'Arts et divertissement' END
+JOIN categories c ON c.nom_categorie = ELT(n.theme_id, 'Géographie', 'Histoire', 'Sciences', 'Sport', 'Culture générale', 'Arts et divertissement')
 JOIN questions q ON q.id_categorie = c.id_categorie AND q.enonce = n.enonce
 WHERE NOT EXISTS (SELECT 1 FROM reponses r WHERE r.id_question = q.id_question);
 
@@ -436,6 +506,22 @@ SELECT q.id_question,
 FROM questions_niveaux_a_remplir q
 CROSS JOIN (SELECT 0 AS position UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3) p
 ORDER BY q.id_question, p.position;
+
+-- Corriger aussi les installations qui possèdent déjà les questions initiales.
+UPDATE questions q JOIN categories c USING (id_categorie)
+SET q.enonce = 'Dans quel sport utilise-t-on habituellement un ballon ovale pour marquer un essai ?',
+    q.explication = 'Au rugby, le ballon est ovale et l’on peut marquer un essai.'
+WHERE c.nom_categorie = 'Sport' AND q.enonce = 'Avec quel type de ballon joue-t-on au rugby ?';
+
+UPDATE questions q JOIN categories c USING (id_categorie)
+SET q.enonce = 'Dans quel sport un touchdown vaut-il six points ?',
+    q.explication = 'Un touchdown au football américain rapporte six points avant la transformation.'
+WHERE c.nom_categorie = 'Sport' AND q.enonce = 'Combien de points vaut un touchdown au football américain ?';
+
+UPDATE questions q JOIN categories c USING (id_categorie)
+SET q.enonce = 'Quel joueur a atteint 16 buts en Coupe du monde masculine lors de l’édition 2014 ?',
+    q.explication = 'Miroslav Klose a marqué son seizième but en Coupe du monde face au Brésil en 2014.'
+WHERE c.nom_categorie = 'Sport' AND q.enonce = 'Quel joueur détient le record de buts en Coupe du monde masculine ?';
 
 COMMIT;
 DROP TEMPORARY TABLE questions_niveaux_a_remplir;

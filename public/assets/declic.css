@@ -360,6 +360,23 @@ label.game-answer { cursor: pointer; }
 .game-review { margin-top: 1.3rem; text-align: left; }
 .game-review summary { cursor: pointer; }
 
+.ranking-banner img { object-position: right 47%; }
+.ranking-themes { display: flex; flex-wrap: wrap; gap: .55rem; }
+.ranking-themes a {
+  border: 1px solid var(--rule); border-radius: 2rem; padding: .42rem .9rem; text-decoration: none;
+}
+.ranking-themes a:hover { border-color: var(--amber); }
+.ranking-themes a[aria-current="page"] { background: var(--amber); border-color: var(--amber); color: #23170c; font-weight: 700; }
+.ranking-position { color: var(--amber); }
+.ranking-table { width: 100%; border-collapse: collapse; text-align: left; }
+.ranking-table :is(td, th) { padding: .65rem .7rem; border-bottom: 1px solid var(--rule); }
+.ranking-table th[scope="row"] { overflow-wrap: anywhere; }
+.ranking-table :is(td, th):last-child { text-align: right; }
+.ranking-table .declic-initial { display: inline-grid; margin-inline-end: .55rem; vertical-align: middle; }
+.ranking-leader { background: #ffb04a20; }
+.ranking-leader td:first-child { color: var(--amber); font-weight: 700; }
+.ranking-note { color: var(--muted); }
+
 @media (hover: none) {
   .theme-levels { display: flex; }
   .theme-card::before { background-color: #071c2528; }

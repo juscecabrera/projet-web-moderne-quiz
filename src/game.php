@@ -194,18 +194,21 @@ function quiz_success_rate(int $correct, int $total): string
 function quiz_ranking(PDO $database, int $themeId): array
 {
     $statement = $database->prepare(
-        "WITH cumuls AS (
-             SELECT p.id_utilisateur, SUM(r.points_obtenus) AS points
+        "WITH parties_du_theme AS (
+             SELECT p.id_utilisateur, p.score_total
              FROM parties p
              JOIN reponses_joueurs r ON r.id_partie = p.id_partie
              JOIN questions q ON q.id_question = r.id_question
-             WHERE p.statut = 'terminee' AND q.id_categorie = ? AND p.id_utilisateur IS NOT NULL
-             GROUP BY p.id_utilisateur
+             WHERE p.statut = 'terminee' AND p.id_utilisateur IS NOT NULL
+             GROUP BY p.id_partie
+             HAVING MIN(q.id_categorie) = ? AND MAX(q.id_categorie) = ?
+         ), cumuls AS (
+             SELECT id_utilisateur, SUM(score_total) AS points FROM parties_du_theme GROUP BY id_utilisateur
          )
-         SELECT RANK() OVER (ORDER BY m.points DESC) AS rang, u.pseudo, m.points
+         SELECT RANK() OVER (ORDER BY m.points DESC) AS rang, u.id_utilisateur, u.pseudo, m.points
          FROM cumuls m JOIN utilisateurs u ON u.id_utilisateur = m.id_utilisateur
          ORDER BY rang, u.pseudo, u.id_utilisateur"
     );
-    $statement->execute([$themeId]);
+    $statement->execute([$themeId, $themeId]);
     return $statement->fetchAll(PDO::FETCH_ASSOC);
 }
