@@ -1,4 +1,4 @@
--- Banque complémentaire pour Géographie, Sciences et Arts et divertissement. Réimportable.
+-- Questions supplémentaires. Ce fichier peut être réimporté.
 USE quiz_culture_generale;
 INSERT INTO categories (nom_categorie, description)
 SELECT 'Arts et divertissement', 'Cinéma, musique, littérature et arts visuels'
@@ -507,7 +507,7 @@ FROM questions_niveaux_a_remplir q
 CROSS JOIN (SELECT 0 AS position UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3) p
 ORDER BY q.id_question, p.position;
 
--- Corriger aussi les installations qui possèdent déjà les questions initiales.
+-- Met à jour les anciennes questions de Sport sans changer leurs identifiants.
 UPDATE questions q JOIN categories c USING (id_categorie)
 SET q.enonce = 'Dans quel sport utilise-t-on habituellement un ballon ovale pour marquer un essai ?',
     q.explication = 'Au rugby, le ballon est ovale et l’on peut marquer un essai.'

@@ -1,32 +1,4 @@
--- ============================================================
--- PROJET : QUIZ DE CULTURE GENERALE GAMIFIE
--- FICHIER : schema.sql
--- BASE DE DONNEES : quiz_culture_generale
--- SGBD : MySQL 8
--- VERSION : 1.0
--- ============================================================
-
--- DESCRIPTION :
--- Ce script permet de créer la base de données
--- de l'application Quiz de culture générale.
---
--- Il contient :
--- 1. Utilisateurs
--- 2. Categories
--- 3. Difficultes
--- 4. Questions
--- 5. Reponses
--- 6. Parties
--- 7. Reponses des joueurs
---
--- Les relations sont assurées par des clés étrangères.
--- Toutes les tables utilisent le moteur InnoDB.
--- ============================================================
-
-
--- ============================================================
--- 1. CREATION DE LA BASE DE DONNEES
--- ============================================================
+-- Schéma MySQL de DÉCLIC.
 
 CREATE DATABASE IF NOT EXISTS quiz_culture_generale
 CHARACTER SET utf8mb4
@@ -35,9 +7,6 @@ COLLATE utf8mb4_unicode_ci;
 USE quiz_culture_generale;
 
 
--- ============================================================
--- 2. TABLE UTILISATEURS
--- ============================================================
 
 CREATE TABLE IF NOT EXISTS utilisateurs (
 
@@ -73,9 +42,6 @@ CREATE TABLE IF NOT EXISTS utilisateurs (
 ) ENGINE = InnoDB;
 
 
--- ============================================================
--- Photos de profil
--- ============================================================
 
 CREATE TABLE IF NOT EXISTS photos_profils (
     id_utilisateur INT UNSIGNED PRIMARY KEY,
@@ -84,9 +50,6 @@ CREATE TABLE IF NOT EXISTS photos_profils (
         REFERENCES utilisateurs(id_utilisateur) ON DELETE CASCADE
 ) ENGINE = InnoDB;
 
--- ============================================================
--- 3. TABLE CATEGORIES
--- ============================================================
 
 CREATE TABLE IF NOT EXISTS categories (
 
@@ -105,9 +68,6 @@ CREATE TABLE IF NOT EXISTS categories (
 ) ENGINE = InnoDB;
 
 
--- ============================================================
--- 4. TABLE DIFFICULTES
--- ============================================================
 
 CREATE TABLE IF NOT EXISTS difficultes (
 
@@ -129,9 +89,6 @@ CREATE TABLE IF NOT EXISTS difficultes (
 ) ENGINE = InnoDB;
 
 
--- ============================================================
--- 5. TABLE QUESTIONS
--- ============================================================
 
 CREATE TABLE IF NOT EXISTS questions (
 
@@ -184,9 +141,6 @@ CREATE TABLE IF NOT EXISTS questions (
 ) ENGINE = InnoDB;
 
 
--- ============================================================
--- 6. TABLE REPONSES
--- ============================================================
 
 CREATE TABLE IF NOT EXISTS reponses (
 
@@ -213,9 +167,6 @@ CREATE TABLE IF NOT EXISTS reponses (
 ) ENGINE = InnoDB;
 
 
--- ============================================================
--- 7. TABLE PARTIES
--- ============================================================
 
 CREATE TABLE IF NOT EXISTS parties (
 
@@ -262,9 +213,6 @@ CREATE TABLE IF NOT EXISTS parties (
 ) ENGINE = InnoDB;
 
 
--- ============================================================
--- 8. TABLE REPONSES_JOUEURS
--- ============================================================
 
 CREATE TABLE IF NOT EXISTS reponses_joueurs (
 
@@ -316,8 +264,3 @@ CREATE TABLE IF NOT EXISTS reponses_joueurs (
         )
 
 ) ENGINE = InnoDB;
-
-
--- ============================================================
--- FIN DU SCRIPT SQL
--- ============================================================

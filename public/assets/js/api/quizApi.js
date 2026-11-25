@@ -1,6 +1,4 @@
 (function (Quiz) {
-  // Simule l'API du backend. Pour migrer : remplacer le corps de chaque fonction
-  // par un fetch() vers le backend, en gardant le même nom et les mêmes retours.
 
   async function getCategories() {
     return Quiz.CATEGORIES.map(({ id, nom, description }) => ({ id, nom, description }));
@@ -47,7 +45,6 @@
     );
   }
 
-  // Les bonnes réponses ne sont jamais envoyées ici (README racine, section 8).
   async function getPartie(categorieId, difficulteIds = Quiz.DIFFICULTES.map(({ id }) => id)) {
     return getQuestionsMelangees(
       getQuestionsDisponibles(categorieId, difficulteIds),

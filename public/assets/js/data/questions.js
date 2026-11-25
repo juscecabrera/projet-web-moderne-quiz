@@ -1,5 +1,4 @@
-// Données de test, miroir de database/donnees_test.sql.
-// Quand le backend existera, ce fichier sera remplacé par un appel à l'API.
+// Questions du prototype JavaScript.
 
 window.Quiz.CATEGORIES = [
   { id: 1, nom: 'Géographie', description: 'Pays, capitales et continents' },

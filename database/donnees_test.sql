@@ -1,14 +1,7 @@
--- ============================================================
--- PROJET : QUIZ DE CULTURE GENERALE GAMIFIE
--- FICHIER : donnees_test.sql
--- DESCRIPTION : Donnees initiales pour tester l'application
--- ============================================================
+-- À importer une fois, après schema.sql.
 
 USE quiz_culture_generale;
 
--- ============================================================
--- 1. INSERTION DES CATEGORIES
--- ============================================================
 
 INSERT INTO categories (id_categorie, nom_categorie, description)
 VALUES
@@ -19,9 +12,6 @@ VALUES
 (5, 'Culture générale', 'Connaissances variées');
 
 
--- ============================================================
--- 2. INSERTION DES DIFFICULTES
--- ============================================================
 
 INSERT INTO difficultes (id_difficulte, libelle, multiplicateur)
 VALUES
@@ -32,9 +22,6 @@ VALUES
 (5, 'Master', 5.00);
 
 
--- ============================================================
--- 3. INSERTION DES QUESTIONS
--- ============================================================
 
 INSERT INTO questions (
     id_question,
@@ -46,7 +33,7 @@ INSERT INTO questions (
 )
 VALUES
 
--- GEOGRAPHIE
+-- Géographie
 
 (1,
  'Quelle est la capitale du Togo ?',
@@ -58,7 +45,7 @@ VALUES
  'L’océan Pacifique est le plus grand océan du monde.',
  1, 2, 'validee'),
 
--- HISTOIRE
+-- Histoire
 
 (3,
  'En quelle année a commencé la Première Guerre mondiale ?',
@@ -70,7 +57,7 @@ VALUES
  'Louis-Napoléon Bonaparte fut le premier président de la République française.',
  2, 3, 'validee'),
 
--- SCIENCES
+-- Sciences
 
 (5,
  'Quelle planète est surnommée la planète rouge ?',
@@ -82,7 +69,7 @@ VALUES
  'Le symbole chimique de l’or est Au.',
  3, 2, 'validee'),
 
--- SPORT
+-- Sport
 
 (7,
  'Combien de joueurs composent une équipe de football sur le terrain ?',
@@ -94,7 +81,7 @@ VALUES
  'La France a remporté la Coupe du monde de football en 2018.',
  4, 2, 'validee'),
 
--- CULTURE GENERALE
+-- Culture générale
 
 (9,
  'Qui a peint La Joconde ?',
@@ -116,7 +103,7 @@ VALUES
  'Andrew Wiles a démontré le dernier théorème de Fermat dans les années 1990.',
  5, 5, 'validee'),
 
--- GEOGRAPHIE (13 a 29)
+-- Géographie (13 a 29)
 
 (13,
  'Quelle est la capitale de l’Espagne ?',
@@ -203,7 +190,7 @@ VALUES
  'Dodoma est la capitale officielle de la Tanzanie ; Dar es Salaam reste la plus grande ville.',
  1, 5, 'validee'),
 
--- HISTOIRE (30 a 46)
+-- Histoire (30 a 46)
 
 (30,
  'En quelle année Napoléon Bonaparte est-il mort ?',
@@ -290,7 +277,7 @@ VALUES
  'Le Congrès de Vienne, réuni après la chute de Napoléon, s’achève en juin 1815.',
  2, 5, 'validee'),
 
--- SCIENCES (47 a 63)
+-- Sciences (47 a 63)
 
 (47,
  'Quel est le symbole chimique du sodium ?',
@@ -377,7 +364,7 @@ VALUES
  'Le tungstène (W) possède 74 protons.',
  3, 5, 'validee'),
 
--- SPORT (64 a 80)
+-- Sport (64 a 80)
 
 (64,
  'Combien de joueurs composent une équipe de volley-ball sur le terrain ?',
@@ -464,7 +451,7 @@ VALUES
  'Miroslav Klose a marqué son seizième but en Coupe du monde face au Brésil en 2014.',
  4, 5, 'validee'),
 
--- CULTURE GENERALE (81 a 96)
+-- Culture générale (81 a 96)
 
 (81,
  'Qui a écrit le roman « 1984 » ?',
@@ -547,9 +534,6 @@ VALUES
  5, 5, 'validee');
 
 
--- ============================================================
--- 4. INSERTION DES REPONSES
--- ============================================================
 
 INSERT INTO reponses (
     id_question,
@@ -558,79 +542,66 @@ INSERT INTO reponses (
 )
 VALUES
 
--- QUESTION 1 : CAPITALE DU TOGO
 (1, 'Cotonou', FALSE),
 (1, 'Lomé', TRUE),
 (1, 'Accra', FALSE),
 (1, 'Dakar', FALSE),
 
--- QUESTION 2 : PLUS GRAND OCEAN
 (2, 'Océan Atlantique', FALSE),
 (2, 'Océan Indien', FALSE),
 (2, 'Océan Pacifique', TRUE),
 (2, 'Océan Arctique', FALSE),
 
--- QUESTION 3 : PREMIERE GUERRE MONDIALE
 (3, '1912', FALSE),
 (3, '1914', TRUE),
 (3, '1918', FALSE),
 (3, '1939', FALSE),
 
--- QUESTION 4 : PREMIER PRESIDENT FRANCAIS
 (4, 'Charles de Gaulle', FALSE),
 (4, 'Louis-Napoléon Bonaparte', TRUE),
 (4, 'Adolphe Thiers', FALSE),
 (4, 'Jules Grévy', FALSE),
 
--- QUESTION 5 : PLANETE ROUGE
 (5, 'Vénus', FALSE),
 (5, 'Mars', TRUE),
 (5, 'Jupiter', FALSE),
 (5, 'Saturne', FALSE),
 
--- QUESTION 6 : SYMBOLE CHIMIQUE DE L'OR
 (6, 'Ag', FALSE),
 (6, 'Au', TRUE),
 (6, 'Fe', FALSE),
 (6, 'Or', FALSE),
 
--- QUESTION 7 : FOOTBALL
 (7, '9 joueurs', FALSE),
 (7, '10 joueurs', FALSE),
 (7, '11 joueurs', TRUE),
 (7, '12 joueurs', FALSE),
 
--- QUESTION 8 : COUPE DU MONDE 2018
 (8, 'Brésil', FALSE),
 (8, 'Allemagne', FALSE),
 (8, 'France', TRUE),
 (8, 'Argentine', FALSE),
 
--- QUESTION 9 : LA JOCONDE
 (9, 'Pablo Picasso', FALSE),
 (9, 'Vincent van Gogh', FALSE),
 (9, 'Léonard de Vinci', TRUE),
 (9, 'Claude Monet', FALSE),
 
--- QUESTION 10 : LES MISERABLES
 (10, 'Émile Zola', FALSE),
 (10, 'Victor Hugo', TRUE),
 (10, 'Albert Camus', FALSE),
 (10, 'Molière', FALSE),
 
--- QUESTION 11 : TRAITES DE WESTPHALIE
 (11, 'Le traité d’Utrecht', FALSE),
 (11, 'Les traités de Westphalie', TRUE),
 (11, 'Le traité de Versailles', FALSE),
 (11, 'Le traité de Paris', FALSE),
 
--- QUESTION 12 : DERNIER THEOREME DE FERMAT
 (12, 'Alan Turing', FALSE),
 (12, 'David Hilbert', FALSE),
 (12, 'Andrew Wiles', TRUE),
 (12, 'Benoît Mandelbrot', FALSE),
 
--- QUESTIONS 13 A 29 : GEOGRAPHIE
 (13, 'Barcelone', FALSE),
 (13, 'Madrid', TRUE),
 (13, 'Séville', FALSE),
@@ -700,7 +671,6 @@ VALUES
 (29, 'Zanzibar', FALSE),
 (29, 'Arusha', FALSE),
 
--- QUESTIONS 30 A 46 : HISTOIRE
 (30, '1815', FALSE),
 (30, '1821', TRUE),
 (30, '1830', FALSE),
@@ -770,7 +740,6 @@ VALUES
 (46, '1830', FALSE),
 (46, '1848', FALSE),
 
--- QUESTIONS 47 A 63 : SCIENCES
 (47, 'So', FALSE),
 (47, 'Na', TRUE),
 (47, 'Sd', FALSE),
@@ -840,7 +809,6 @@ VALUES
 (63, '82', FALSE),
 (63, '29', FALSE),
 
--- QUESTIONS 64 A 80 : SPORT
 (64, '5', FALSE),
 (64, '6', TRUE),
 (64, '7', FALSE),
@@ -910,7 +878,6 @@ VALUES
 (80, 'Miroslav Klose', TRUE),
 (80, 'Lionel Messi', FALSE),
 
--- QUESTIONS 81 A 96 : CULTURE GENERALE
 (81, 'Aldous Huxley', FALSE),
 (81, 'George Orwell', TRUE),
 (81, 'Ray Bradbury', FALSE),
@@ -977,9 +944,6 @@ VALUES
 (96, 'Kurt Weill', FALSE);
 
 
--- ============================================================
--- 5. VERIFICATION DES DONNEES
--- ============================================================
 
 SELECT 'Categories' AS element, COUNT(*) AS total
 FROM categories
@@ -998,8 +962,3 @@ UNION ALL
 
 SELECT 'Reponses', COUNT(*)
 FROM reponses;
-
-
--- ============================================================
--- FIN DU FICHIER donnees_test.sql
--- ============================================================
