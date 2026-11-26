@@ -18,7 +18,7 @@ try {
     }
     $counts = $database->query(
         'SELECT q.id_categorie, q.id_difficulte, COUNT(*) AS total
-         FROM questions q WHERE q.id_difficulte IN (1, 2, 3) AND ' . QUIZ_PLAYABLE_QUESTION . '
+         FROM questions q WHERE ' . QUIZ_PLAYABLE_QUESTION . '
          GROUP BY q.id_categorie, q.id_difficulte'
     );
     foreach ($counts as $count) {
@@ -32,7 +32,7 @@ try {
     $error = 'Les thèmes sont temporairement indisponibles.';
 }
 
-$icons = ['Géographie' => '🌍', 'Sciences' => '🔬'];
+$icons = ['Géographie' => '🌍', 'Histoire' => '📜', 'Sciences' => '🔬', 'Sport' => '🏅', 'Culture générale' => '🎭'];
 $hasPlayableTheme = (bool) array_filter(array_column($themes, 'niveaux'));
 
 quiz_layout_start('Thèmes', 'themes', true);

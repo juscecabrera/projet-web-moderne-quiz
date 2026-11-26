@@ -4,13 +4,12 @@ declare(strict_types=1);
 const QUIZ_PLAYABLE_QUESTION = "q.statut_validation = 'validee'
     AND EXISTS (SELECT 1 FROM reponses r WHERE r.id_question = q.id_question
                 GROUP BY r.id_question HAVING COUNT(*) = 4 AND SUM(r.est_correcte = 1) = 1)";
-const QUIZ_LEVELS = [1 => 'Facile', 2 => 'Moyen', 3 => 'Difficile'];
+const QUIZ_LEVELS = [1 => 'Facile', 2 => 'Intermédiaire', 3 => 'Difficile', 4 => 'Expert', 5 => 'Master'];
 
 function quiz_themes(PDO $database): array
 {
     return $database->query(
-        "SELECT id_categorie, nom_categorie, description FROM categories
-         WHERE nom_categorie IN ('Géographie', 'Sciences') ORDER BY nom_categorie"
+        "SELECT id_categorie, nom_categorie, description FROM categories ORDER BY nom_categorie"
     )->fetchAll(PDO::FETCH_ASSOC);
 }
 
