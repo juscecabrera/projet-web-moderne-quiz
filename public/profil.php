@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 require __DIR__ . '/../src/session.php';
 require __DIR__ . '/../src/database.php';
+require __DIR__ . '/../src/layout.php';
 $userId = quiz_require_user();
 $error = '';
 $saved = isset($_SESSION['profile_saved']);
@@ -16,8 +17,8 @@ try {
     $database = quiz_database();
     $statement = $database->prepare('SELECT pseudo FROM utilisateurs WHERE id_utilisateur = ?');
     $statement->execute([$userId]);
-    $pseudo = $statement->fetchColumn();
-    if ($pseudo === false) {
+    $pseudo = (string) $statement->fetchColumn();
+    if ($pseudo === '') {
         $_SESSION = [];
         quiz_redirect('connexion.php');
     }
@@ -42,47 +43,44 @@ try {
         $error = 'Le profil est temporairement indisponible.';
     }
 }
+
+$initial = $pseudo !== '' ? mb_strtoupper(mb_substr($pseudo, 0, 1)) : '?';
+
+quiz_layout_start('Mon profil', 'profil', true);
 ?>
-<!doctype html>
-<html lang="fr">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Mon profil · Quiz de culture générale</title>
-    <link rel="stylesheet" href="assets/style.css">
-</head>
-<body>
-    <div class="account-panel theme-panel profile-layout">
-        <aside>
-            <nav aria-label="Menu du profil">
-                <a href="accueil.php">Accueil</a>
-                <a href="profil.php" aria-current="page">Mon profil</a>
-                <a href="performances.php">Mes performances</a>
-                <a href="classement.php">Classement</a>
-            </nav>
-            <form action="deconnexion.php" method="post">
-                <input type="hidden" name="csrf_token" value="<?= quiz_csrf_token() ?>">
-                <button class="btn" type="submit">Se déconnecter</button>
-            </form>
-        </aside>
-        <main>
-            <h1>Mon profil</h1>
-            <?php if ($error !== ''): ?>
-                <p role="alert"><?= quiz_escape($error) ?></p>
-            <?php elseif ($saved): ?>
-                <p role="status">Pseudo enregistré.</p>
-            <?php endif; ?>
-            <?php if (http_response_code() !== 503): ?>
-                <form method="post">
-                    <input type="hidden" name="csrf_token" value="<?= quiz_csrf_token() ?>">
-                    <label>Pseudo public
-                        <input name="pseudo" value="<?= quiz_escape($pseudo) ?>" maxlength="50" required>
-                    </label>
-                    <p>Ce nom apparaît dans le classement.</p>
-                    <button class="btn btn-primary" type="submit">Enregistrer</button>
-                </form>
-            <?php endif; ?>
-        </main>
+<div class="page-head">
+    <div>
+        <p class="eyebrow">Mon compte</p>
+        <h1>Mon profil</h1>
+        <p class="lead">Le pseudo choisi ici apparaît publiquement dans le classement.</p>
     </div>
-</body>
-</html>
+</div>
+
+<div class="card card--narrow">
+    <div class="profile-head">
+        <span class="profile-avatar" aria-hidden="true"><?= quiz_escape($initial) ?></span>
+        <div>
+            <h1><?= quiz_escape($pseudo) ?></h1>
+            <p>Joueur connecté</p>
+        </div>
+    </div>
+
+    <?php quiz_alert($error); ?>
+    <?php if ($error === '' && $saved): ?>
+        <?php quiz_alert('Pseudo enregistré avec succès.', 'success'); ?>
+    <?php endif; ?>
+
+    <?php if (http_response_code() !== 503): ?>
+        <form method="post">
+            <input type="hidden" name="csrf_token" value="<?= quiz_csrf_token() ?>">
+            <div class="field">
+                <label for="pseudo">Pseudo public</label>
+                <input id="pseudo" name="pseudo" type="text" value="<?= quiz_escape($pseudo) ?>" maxlength="50" autocomplete="nickname" required>
+                <p class="field-hint">Entre 1 et 50 caractères. Ce nom est visible par les autres joueurs.</p>
+            </div>
+            <button class="btn btn-primary btn-block" type="submit">Enregistrer</button>
+        </form>
+    <?php endif; ?>
+</div>
+<?php
+quiz_layout_end();
